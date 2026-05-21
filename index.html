@@ -482,25 +482,77 @@ class="relative min-h-screen overflow-hidden flex items-center">
         </div>
 
         <!-- ARTICLES -->
-<section class="py-24">
+<!-- PREMIUM ARTICLES -->
 
-  <div class="max-w-7xl mx-auto px-6">
+<section
+class="relative py-32 px-6 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
 
-    <div class="flex justify-between items-center mb-10">
+  <!-- BG GLOW -->
 
-      <h2 class="text-4xl font-bold">
-        Artikel Terbaru
-      </h2>
+  <div
+  class="absolute top-0 right-0 w-[400px] h-[400px] bg-orange-200/40 blur-[120px] rounded-full">
+  </div>
 
-      <a href="articles.html"
-      class="text-orange-500 font-semibold">
-        Lihat Semua →
+  <div
+  class="max-w-7xl mx-auto relative z-10">
+
+    <!-- TITLE -->
+
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-20 gap-10">
+
+      <div>
+
+        <div
+        class="inline-flex bg-orange-100 text-orange-500 px-5 py-2 rounded-full font-semibold mb-6">
+
+          Healthcare Insights
+
+        </div>
+
+        <h2
+        class="text-5xl lg:text-6xl font-black leading-tight mb-6 tracking-tight">
+
+          Latest
+          <span class="text-orange-500">
+            Health Articles
+          </span>
+
+        </h2>
+
+        <p
+        class="text-gray-500 text-xl max-w-2xl leading-relaxed">
+
+          Temukan berbagai edukasi kesehatan modern,
+          kesehatan kerja, lifestyle sehat,
+          dan informasi medis terpercaya dari Santara Medical.
+
+        </p>
+
+      </div>
+
+      <!-- BUTTON -->
+
+      <a
+      href="articles.html"
+      class="group inline-flex items-center gap-4 bg-black hover:bg-orange-500 transition text-white px-8 py-5 rounded-2xl font-semibold shadow-2xl">
+
+        Explore All Articles
+
+        <span
+        class="group-hover:translate-x-2 transition">
+          →
+        </span>
+
       </a>
 
     </div>
 
-    <div id="homeArticles"
-    class="grid md:grid-cols-3 gap-8">
+    <!-- ARTICLE GRID -->
+
+    <div
+    id="homeArticles"
+    class="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+
     </div>
 
   </div>
