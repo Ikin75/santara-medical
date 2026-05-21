@@ -1,25 +1,21 @@
 [
   {
+    "id": 1,
     "title": "Tips Menjaga Kesehatan Kerja",
+    "category": "Kesehatan Kerja",
+    "featured": true,
     "image": "https://images.unsplash.com/photo-1585435557343-3b092031d4f7?q=80&w=1200&auto=format&fit=crop",
-    "desc": "Panduan menjaga kesehatan dan produktivitas di lingkungan kerja modern."
+    "desc": "Panduan menjaga kesehatan dan produktivitas di lingkungan kerja modern.",
+    "content": "Kesehatan kerja sangat penting untuk menjaga produktivitas dan mencegah penyakit akibat kerja."
   },
 
   {
-    "title": "Pentingnya Medical Check Up",
-    "image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1200&auto=format&fit=crop",
-    "desc": "Deteksi dini kesehatan untuk mencegah penyakit serius sejak awal."
-  },
-
-  {
-    "title": "Gaya Hidup Sehat Modern",
-    "image": "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?q=80&w=1200&auto=format&fit=crop",
-    "desc": "Langkah sederhana meningkatkan kualitas hidup sehat sehari-hari."
-  },
-
-  {
+    "id": 2,
     "title": "Bahaya Kurang Tidur",
+    "category": "Lifestyle",
+    "featured": false,
     "image": "https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?q=80&w=1200&auto=format&fit=crop",
-    "desc": "Kurang tidur dapat memengaruhi kesehatan tubuh dan produktivitas."
+    "desc": "Kurang tidur dapat memengaruhi kesehatan tubuh dan produktivitas.",
+    "content": "Kurang tidur dapat menyebabkan penurunan konsentrasi dan gangguan kesehatan."
   }
 ]

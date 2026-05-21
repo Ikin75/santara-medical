@@ -53,7 +53,7 @@
               Layanan
             </a>
 
-            <a href="#articles" class="hover:text-orange-500 transition">
+            <a href="articles.html" class="hover:text-orange-500 transition">
               Artikel
             </a>
 
@@ -84,7 +84,7 @@
           <a href="#">Home</a>
           <a href="#about">Tentang</a>
           <a href="#services">Layanan</a>
-          <a href="#articles">Artikel</a>
+          <a href="articles.html">Artikel</a>
           <a href="#contact">Kontak</a>
 
           <a
@@ -343,7 +343,6 @@
     </section>
 
     <!-- SEARCH ARTICLE -->
-
     <section id="articles" class="py-28 px-6 bg-gray-50">
       <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
@@ -376,14 +375,30 @@
         </div>
 
         <!-- ARTICLES -->
+<section class="py-24">
 
-        <div
-          id="articleContainer"
-          class="grid md:grid-cols-2 lg:grid-cols-3 gap-10"
-        >
-          <!-- ARTICLE -->
-      </div>
-    </section>
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="flex justify-between items-center mb-10">
+
+      <h2 class="text-4xl font-bold">
+        Artikel Terbaru
+      </h2>
+
+      <a href="articles.html"
+      class="text-orange-500 font-semibold">
+        Lihat Semua →
+      </a>
+
+    </div>
+
+    <div id="homeArticles"
+    class="grid md:grid-cols-3 gap-8">
+    </div>
+
+  </div>
+
+</section>
 
     <!-- CTA -->
 
@@ -572,5 +587,6 @@
       });
     </script>
     <script src="./js/articles.js"></script>
+    <script src="./js/home-articles.js"></script>
   </body>
 </html>
