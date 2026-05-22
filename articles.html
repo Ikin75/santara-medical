@@ -3,85 +3,272 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Artikel Santara</title>
+    <title>Artikel Kesehatan - Santara Medical</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+      }
+      /* Animasi Reveal Premium */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      /* Efek Zoom untuk gambar (jika ada di dalam file JS) */
+      .zoom-wrapper {
+        overflow: hidden;
+      }
+      .zoom-wrapper img {
+        transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .zoom-wrapper:hover img {
+        transform: scale(1.08);
+      }
+    </style>
   </head>
 
-  <body class="bg-gray-100">
-    <section class="py-20 px-6">
-      <div class="max-w-7xl mx-auto">
-        <div class="flex justify-between items-center mb-14">
-          <div>
-            <h1 class="text-5xl font-extrabold mb-4">Artikel Kesehatan</h1>
+  <body
+    class="bg-gray-50 dark:bg-[#0f0f0f] text-gray-800 dark:text-gray-200 transition-colors duration-500 relative min-h-screen"
+  >
+    <!-- BACKGROUND GLOW (Sama seperti halaman utama) -->
+    <div
+      class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none"
+    >
+      <div
+        class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/10 blur-[150px] rounded-full"
+      ></div>
+      <div
+        class="absolute bottom-20 left-10 w-[400px] h-[400px] bg-orange-400/10 blur-[150px] rounded-full"
+      ></div>
+    </div>
 
-            <p class="text-gray-600 text-lg">
-              Edukasi kesehatan terpercaya dari Santara Medical.
-            </p>
-          </div>
-
-          <a
-            href="index.html"
-            class="bg-orange-500 text-white px-6 py-3 rounded-xl"
+    <!-- TOP NAV BAR -->
+    <header class="pt-8 px-6 relative z-20">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <!-- Tombol Kembali -->
+        <a
+          href="index.html"
+          class="group flex items-center gap-3 text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-500 font-semibold transition-all duration-300 bg-white dark:bg-[#151515] border border-gray-200 dark:border-white/10 px-5 py-3 rounded-2xl shadow-sm hover:shadow-lg"
+        >
+          <span class="text-xl group-hover:-translate-x-1 transition-transform"
+            >←</span
           >
-            ← Kembali
-          </a>
+          Kembali ke Home
+        </a>
+
+        <!-- Tombol Dark Mode -->
+        <button
+          id="darkToggle"
+          class="w-12 h-12 rounded-2xl bg-white dark:bg-[#151515] border border-gray-200 dark:border-white/10 flex items-center justify-center text-xl hover:bg-orange-500 hover:text-white transition-all shadow-sm hover:shadow-lg"
+        >
+          🌙
+        </button>
+      </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <section class="py-16 px-6 reveal active">
+      <div class="max-w-7xl mx-auto">
+        <!-- HEADER TEKS -->
+        <div class="text-center mb-16">
+          <div
+            class="inline-block bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-5 border border-orange-200 dark:border-orange-500/30"
+          >
+            Pusat Informasi
+          </div>
+          <h1
+            class="text-5xl lg:text-6xl font-black mb-6 tracking-tight dark:text-white"
+          >
+            Artikel
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600"
+              >Kesehatan</span
+            >
+          </h1>
+          <p
+            class="text-gray-500 dark:text-gray-400 text-lg lg:text-xl max-w-2xl mx-auto"
+          >
+            Edukasi kesehatan terpercaya dari tenaga profesional Santara
+            Medical.
+          </p>
         </div>
 
-        <!-- SEARCH -->
-
-        <div class="mb-10">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Cari artikel..."
-            class="w-full p-5 rounded-2xl border border-gray-200 shadow-lg"
-          />
+        <!-- SEARCH BAR PREMIUM -->
+        <div class="mb-12">
+          <div class="relative max-w-2xl mx-auto group">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Cari artikel kesehatan..."
+              class="w-full py-5 pl-7 pr-16 rounded-2xl border border-gray-200 dark:border-white/10 dark:bg-[#151515] dark:text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/20 text-lg transition-all"
+            />
+            <button
+              id="searchBtn"
+              class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-orange-500/10 text-orange-500 rounded-xl hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-sm z-10 cursor-pointer text-xl"
+            >
+              🔍
+            </button>
+          </div>
         </div>
 
-        <!-- FILTER -->
-
-        <div class="flex gap-4 flex-wrap mb-10">
+        <!-- FILTER BUTTONS -->
+        <div
+          class="flex justify-center gap-4 flex-wrap mb-16"
+          id="filterContainer"
+        >
           <button
-            class="filter-btn bg-orange-500 text-white px-5 py-2 rounded-xl"
+            class="filter-btn active bg-orange-500 text-white border border-transparent px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:-translate-y-1"
             data-category="All"
           >
-            Semua
+            Semua Artikel
           </button>
-
           <button
-            class="filter-btn bg-gray-200 px-5 py-2 rounded-xl"
+            class="filter-btn bg-white dark:bg-[#1f1f1f] text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-white/10 px-6 py-3 rounded-xl font-medium shadow-sm hover:bg-orange-50 dark:hover:bg-orange-500/10 hover:text-orange-500 transition-all hover:-translate-y-1"
             data-category="Kesehatan Kerja"
           >
             Kesehatan Kerja
           </button>
-
           <button
-            class="filter-btn bg-gray-200 px-5 py-2 rounded-xl"
+            class="filter-btn bg-white dark:bg-[#1f1f1f] text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-white/10 px-6 py-3 rounded-xl font-medium shadow-sm hover:bg-orange-50 dark:hover:bg-orange-500/10 hover:text-orange-500 transition-all hover:-translate-y-1"
             data-category="Lifestyle"
           >
             Lifestyle
           </button>
         </div>
 
-        <!-- FEATURED -->
-
+        <!-- FEATURED ARTICLE -->
         <div id="featuredArticle" class="mb-16"></div>
 
-        <!-- ARTICLES -->
-
+        <!-- ARTICLES GRID -->
         <div
           id="articleContainer"
-          class="grid md:grid-cols-2 lg:grid-cols-3 gap-10"
-        ></div>
+          class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <!-- Artikel akan dimuat melalui JavaScript -->
+        </div>
 
         <!-- PAGINATION -->
-
-        <div id="pagination" class="flex justify-center gap-3 mt-16"></div>
+        <div
+          id="pagination"
+          class="flex justify-center items-center gap-3 mt-16 pb-10"
+        ></div>
       </div>
     </section>
 
+    <script>
+      // 1. DARK MODE TOGGLE
+      const darkToggle = document.getElementById("darkToggle");
+      if (localStorage.getItem("dark-mode") === "true") {
+        document.documentElement.classList.add("dark");
+      }
+      darkToggle.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        localStorage.setItem(
+          "dark-mode",
+          document.documentElement.classList.contains("dark"),
+        );
+      });
+
+      // 2. SEARCH ARTIKEL BERFUNGSI (Bisa Ketik, Enter, & Klik 🔍)
+      const searchInput = document.getElementById("searchInput");
+      const searchBtn = document.getElementById("searchBtn");
+
+      if (searchInput && searchBtn) {
+        function performSearch() {
+          let filter = searchInput.value.toLowerCase();
+
+          // Script ini mengasumsikan artikel yang di-render punya class "article"
+          // Pastikan di file JS kamu, kontainer artikel memiliki class="article"
+          let articles = document.querySelectorAll(".article");
+
+          articles.forEach(function (item) {
+            let text = item.innerText.toLowerCase();
+            if (text.includes(filter)) {
+              item.style.display = "";
+            } else {
+              item.style.display = "none";
+            }
+          });
+        }
+
+        // Jalankan pencarian saat tombol 🔍 diklik
+        searchBtn.addEventListener("click", performSearch);
+
+        // Jalankan pencarian saat tombol Enter ditekan
+        searchInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            performSearch();
+          }
+        });
+
+        // Jalankan pencarian otomatis saat sedang mengetik (Live Search)
+        searchInput.addEventListener("keyup", performSearch);
+      }
+
+      // 3. UI TOMBOL FILTER (Memberikan Efek Nyala Saat Diklik)
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          // Reset semua tombol ke warna abu/putih
+          filterBtns.forEach((b) => {
+            b.classList.remove(
+              "bg-orange-500",
+              "text-white",
+              "shadow-lg",
+              "border-transparent",
+              "active",
+            );
+            b.classList.add(
+              "bg-white",
+              "dark:bg-[#1f1f1f]",
+              "text-gray-600",
+              "dark:text-gray-300",
+              "border-gray-200",
+              "dark:border-white/10",
+            );
+          });
+
+          // Aktifkan warna orange pada tombol yang diklik
+          this.classList.remove(
+            "bg-white",
+            "dark:bg-[#1f1f1f]",
+            "text-gray-600",
+            "dark:text-gray-300",
+            "border-gray-200",
+            "dark:border-white/10",
+          );
+          this.classList.add(
+            "bg-orange-500",
+            "text-white",
+            "shadow-lg",
+            "border-transparent",
+            "active",
+          );
+        });
+      });
+    </script>
+
+    <!-- Eksternal JS (Pastikan ini yang merender isi artikel) -->
     <script src="./js/articles.js"></script>
   </body>
 </html>
