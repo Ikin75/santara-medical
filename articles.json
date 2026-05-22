@@ -1,21 +1,74 @@
 [
   {
     "id": 1,
-    "title": "Tips Menjaga Kesehatan Kerja",
+    "title": "Pentingnya Ergonomi di Tempat Kerja: Cegah Nyeri Punggung",
     "category": "Kesehatan Kerja",
-    "featured": true,
-    "image": "https://images.unsplash.com/photo-1585435557343-3b092031d4f7?q=80&w=1200&auto=format&fit=crop",
-    "desc": "Panduan menjaga kesehatan dan produktivitas di lingkungan kerja modern.",
-    "content": "Kesehatan kerja sangat penting untuk menjaga produktivitas dan mencegah penyakit akibat kerja."
+    "image": "https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?q=80&w=1200",
+    "desc": "Duduk berjam-jam menatap layar monitor sering kali berdampak buruk bagi postur tubuh. Ketahui cara ideal mengatur posisi kursi dan meja kerja.",
+    "content": "<p>Bekerja di depan komputer selama berjam-jam tanpa disadari dapat merusak postur alami tulang belakang. Nyeri punggung bawah, leher kaku, hingga ketegangan pada bahu adalah keluhan paling umum di kalangan pekerja kantoran.</p><h2>Cara Mengatur Meja Kerja yang Baik</h2><p>Pertama, pastikan posisi monitor sejajar dengan arah pandangan mata agar Anda tidak perlu menunduk. Kedua, gunakan kursi yang mendukung lekukan alami tulang punggung bawah (lumbar support).</p><p>Terakhir, terapkan aturan 20-20-20: Setiap 20 menit, palingkan mata sejauh 20 kaki (6 meter) selama 20 detik, dan regangkan tubuh sejenak. Langkah kecil ini akan membawa dampak besar bagi kesehatan jangka panjang Anda.</p>",
+    "featured": true
   },
-
   {
     "id": 2,
-    "title": "Bahaya Kurang Tidur",
+    "title": "5 Pilihan Bekal Bernutrisi untuk Pekerja Kantoran yang Sibuk",
     "category": "Lifestyle",
-    "featured": false,
-    "image": "https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?q=80&w=1200&auto=format&fit=crop",
-    "desc": "Kurang tidur dapat memengaruhi kesehatan tubuh dan produktivitas.",
-    "content": "Kurang tidur dapat menyebabkan penurunan konsentrasi dan gangguan kesehatan."
+    "image": "https://images.unsplash.com/photo-1498837167922-41cfa6f318ba?q=80&w=800",
+    "desc": "Tidak punya banyak waktu untuk memasak di pagi hari? Berikut adalah daftar rekomendasi bekal makan siang praktis, sehat, dan padat nutrisi.",
+    "content": "<p>Menyiapkan bekal sendiri bukan hanya soal berhemat, tapi juga memastikan asupan gizi yang masuk ke tubuh tetap terkontrol. Pekerja yang sibuk sering kali terjebak pada makanan cepat saji yang tinggi garam dan lemak jenuh.</p><p>Untuk mengatasinya, cobalah resep bekal cepat seperti salad sayur dengan protein dada ayam panggang, atau <i>wrap</i> gandum utuh isi tuna. Kuncinya adalah menyiapkan bahan (meal prep) di akhir pekan agar pagi hari Anda bebas dari stres.</p>",
+    "featured": false
+  },
+  {
+    "id": 3,
+    "title": "Manajemen Stres: Mengatasi Burnout Tanpa Mengganggu Produktivitas",
+    "category": "Kesehatan Kerja",
+    "image": "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=800",
+    "desc": "Tekanan pekerjaan yang menumpuk bisa berujung pada kelelahan mental atau burnout. Pelajari teknik pernapasan serta relaksasi singkat di meja kerja.",
+    "content": "<p>Stres adalah bagian tak terhindarkan dari dunia kerja profesional. Namun, ketika stres dibiarkan menumpuk, hal ini dapat berujung pada <i>burnout</i>, sebuah kondisi kelelahan mental dan fisik yang ekstrem.</p><p>Jika Anda mulai merasa kehilangan motivasi dan mudah lelah, cobalah mengambil jeda singkat 5 menit di sela pekerjaan untuk melakukan pernapasan dalam (deep breathing). Selain itu, sangat penting untuk menetapkan batas yang jelas antara waktu kerja dan waktu istirahat. Ingat, kesehatan mental Anda sama pentingnya dengan karir Anda.</p>",
+    "featured": false
+  },
+  {
+    "id": 4,
+    "title": "Sindrom Mata Lelah: Bahaya Tersembunyi di Balik Layar Monitor",
+    "category": "Kesehatan Kerja",
+    "image": "./images/layar-monitor-kacamata.jpg",
+    "desc": "Menatap layar komputer berjam-jam dapat memicu sindrom mata lelah atau Computer Vision Syndrome. Ketahui cara mencegahnya dengan metode sederhana di meja kerja Anda.",
+    "content": "Bekerja di kantor masa kini sangat bergantung pada perangkat digital. Sayangnya, paparan cahaya biru dari layar monitor secara terus-menerus dapat menyebabkan Computer Vision Syndrome (CVS) atau sindrom mata lelah.Gejala dan Dampak CVSGejala umum yang sering diabaikan meliputi mata kering, pandangan kabur, sakit kepala, hingga nyeri pada leher. Jika tidak ditangani, kondisi ini dapat menurunkan produktivitas dan merusak kesehatan mata jangka panjang.Langkah Pencegahan EfektifAtur Pencahayaan: Pastikan cahaya ruangan tidak terlalu silau atau terlalu redup dibandingkan layar monitor Anda.Gunakan Filter Anti-Radiasi: Pasang pelindung layar atau gunakan kacamata khusus anti-radiasi untuk memblokir spektrum cahaya biru.Aturan 20-20-20: Istirahatkan mata setiap 20 menit dengan melihat objek sejauh 20 kaki (sekitar 6 meter) selama 20 detik.Kesehatan mata adalah aset berharga. Pastikan Anda rutin berkedip dan menjaga jarak pandang ideal dari layar sekitar 50-60 sentimeter.",
+    "featured": false
+  },
+  {
+    "id": 5,
+    "title": "Bahaya Duduk Terlalu Lama: Ancaman Sedentary Lifestyle di Kantor",
+    "category": "Lifestyle",
+    "image": "./images/kursi-kantor-ergonomis.jpg",
+    "desc": "Gaya hidup kurang gerak atau sedentary lifestyle menjadi ancaman nyata bagi pekerja kantoran. Temukan trik mudah untuk tetap aktif meski sibuk dengan tumpukan dokumen.",
+    "content": "Banyak pekerja kantoran menghabiskan lebih dari delapan jam sehari dalam posisi duduk. Kebiasaan ini dikenal dengan istilah sedentary lifestyle, yang memicu berbagai risiko kesehatan mulai dari obesitas, diabetes tipe 2, hingga penyakit kardiovaskular.Mengapa Duduk Terlalu Lama Berbahaya?Saat kita duduk dalam waktu lama, pembakaran kalori menurun drastis dan sirkulasi darah menjadi kurang lancar. Hal ini menyebabkan penumpukan lemak dan penurunan metabolisme tubuh secara keseluruhan.Tips Aktif di Lingkungan KerjaGunakan Tangga: Biasakan memilih tangga daripada lift jika hanya naik atau turun satu hingga dua lantai.Peregangan Berkala: Lakukan peregangan ringan setiap 1-2 jam sekali. Berdiri dan berjalanlah sebentar untuk mengambil minum atau ke toilet.Meja Berdiri (Standing Desk): Jika memungkinkan, gunakan meja kerja yang bisa disesuaikan ketinggiannya agar Anda bisa bekerja sambil berdiri secara bergantian.Membiasakan diri untuk terus bergerak adalah investasi kesehatan yang sangat krusial bagi karir dan masa depan Anda.",
+    "featured": false
+  },
+  {
+    "id": 6,
+    "title": "Kualitas Udara Kantor: Mencegah Sick Building Syndrome",
+    "category": "Kesehatan Kerja",
+    "image": "./images/tanaman-hias-meja.jpg",
+    "desc": "Kualitas udara di dalam ruangan kantor ber-AC sering kali lebih buruk daripada udara luar. Pelajari cara mengelola sirkulasi udara untuk menjaga kesehatan sistem pernapasan.",
+    "content": "Tahukah Anda bahwa ruangan tertutup dengan pendingin udara (AC) sentral berpotensi menyimpan polutan tersembunyi? Kondisi sirkulasi udara yang buruk dapat menyebabkan Sick Building Syndrome (SBS), di mana penghuni gedung sering merasa pusing, mual, dan iritasi saluran pernapasan tanpa alasan medis yang jelas.Sumber Polusi di Dalam KantorPartikel debu dari karpet, zat kimia pelarut dari tinta mesin printer, hingga sirkulasi udara yang tidak pernah berganti dengan udara segar luar menjadi penyumbang utama buruknya kualitas udara ruangan.Solusi Membersihkan Udara Ruang KerjaTanaman Pembersih Udara: Letakkan tanaman hias mungil di atas meja kerja Anda untuk membantu menyerap racun udara alami.Perawatan Ventilasi Rutin: Pastikan filter pendingin ruangan di kantor selalu dibersihkan secara berkala agar tidak menjadi sarang jamur dan bakteri.Akses Udara Segar: Jika desain kantor memungkinkan, biarkan jendela terbuka selama beberapa menit di pagi hari agar terjadi pertukaran udara.Udara yang bersih dan kaya oksigen terbukti secara ilmiah mampu meningkatkan fokus dan daya ingat otak saat menyelesaikan tugas penting.",
+    "featured": false
+  },
+  {
+    "id": 7,
+    "title": "Panduan Lengkap Tata Letak Meja Kerja Ergonomis untuk Menghindari Nyeri Punggung",
+    "category": "Kesehatan Kerja",
+    "image": "./images/tata-letak-meja-kerja.jpg",
+    "desc": "Pelajari cara mengatur meja kerja yang tepat untuk menjaga kesehatan tulang belakang. Langkah sederhana ini dapat mencegah nyeri punggung berkepanjangan.",
+    "content": "<h2>Latar Belakang Masalah</h2><p>Di era digital saat ini, sebagian besar pekerja kantoran menghabiskan waktu berjam-jam duduk di depan layar komputer. Tanpa disadari, kebiasaan ini memicu berbagai keluhan kesehatan, terutama nyeri punggung dan leher. Postur tubuh yang buruk akibat tata letak meja kerja yang tidak sesuai dengan prinsip ergonomi menjadi penyebab utama tingginya angka absensi dan penurunan produktivitas di tempat kerja. Ergonomi adalah ilmu yang merancang tempat kerja dan peralatan agar selaras dengan kemampuan fisik tubuh.</p><h2>Data dan Dampak Kesehatan</h2><p>Menurut studi kesehatan kerja global, lebih dari enam puluh persen pekerja kantoran mengalami gangguan muskuloskeletal. Gangguan ini mencakup ketegangan otot, nyeri sendi, hingga masalah struktur tulang belakang. Jika dibiarkan dalam jangka waktu lama, postur statis yang tidak alamiah ini memicu komplikasi serius seperti saraf terjepit (herniated disc) atau sindrom lorong karpal (carpal tunnel syndrome). Dampaknya tidak hanya terasa pada jam kerja, tetapi juga sangat menurunkan kualitas hidup saat beristirahat di rumah.</p><h2>Penjelasan Medis: Ketegangan Tulang Belakang</h2><p>Secara anatomis, tulang belakang dirancang untuk bergerak dan memiliki kelengkungan alami. Ketika Anda duduk dengan posisi membungkuk ke arah monitor berjam-jam, beban pada cakram tulang belakang di area lumbal meningkat hingga dua kali lipat dibandingkan saat berdiri. Otot-otot penopang di punggung dan leher harus bekerja ekstra keras menahan kepala, yang akhirnya menyebabkan spasme otot dan menghambat sirkulasi darah yang membawa oksigen serta nutrisi ke jaringan tubuh.</p><h2>Solusi Detail Penerapan Ergonomi</h2><p>Untuk meminimalkan risiko medis tersebut, Anda harus segera menyesuaikan area kerja Anda. Berikut adalah langkah-langkah praktis yang wajib diterapkan:</p><ul><li><b>Sesuaikan Ketinggian Kursi:</b> Pastikan telapak kaki menapak rata di lantai atau gunakan pijakan kayu di bawah meja. Lutut harus membentuk sudut sembilan puluh derajat.</li><li><b>Posisi Layar Monitor:</b> Tempatkan layar sejauh satu rentangan lengan. Tepi atas monitor wajib sejajar dengan tinggi mata untuk mencegah postur leher yang menunduk konstan.</li><li><b>Penempatan Keyboard:</b> Letakkan alat input dalam jangkauan dekat sehingga siku tetap berada di dekat pinggul dengan sudut tekukan yang rileks.</li><li><b>Istirahat Aktif:</b> Terapkan rutinitas berdiri setiap dua puluh menit untuk meregangkan otot bahu dan mengembalikan sirkulasi darah ke area kaki.</li></ul><p>Mengubah kebiasaan postur mungkin membutuhkan waktu adaptasi. Namun, investasi dalam mengatur lingkungan kerja ini memberikan perlindungan kesehatan tulang jangka panjang yang sangat berharga.</p>",
+    "featured": false
+  },
+  {
+    "id": 8,
+    "title": "Mengatasi Kelelahan Mata Akibat Layar Monitor Berlebih di Tempat Kerja",
+    "category": "Kesehatan Kerja",
+    "image": "./images/layar-monitor-kacamata.jpg",
+    "desc": "Menatap layar terlalu lama dapat memicu sindrom penglihatan digital. Ketahui cara ampuh untuk melindungi kesehatan mata Anda dari paparan cahaya biru.",
+    "content": "<h2>Latar Belakang: Krisis Penglihatan Digital</h2><p>Dalam rutinitas kerja modern, layar digital telah menjadi perangkat yang tidak bisa dipisahkan. Mata kita dipaksa terus fokus pada piksel yang memancarkan radiasi cahaya biru setiap harinya. Paparan layar yang intensif dan terus-menerus ini memicu kondisi medis yang dikenal sebagai Sindrom Penglihatan Komputer (Computer Vision Syndrome). Banyak pekerja yang mengabaikan gejala awalnya karena hanya menganggapnya sebagai kelelahan biasa yang akan sembuh setelah tertidur semalaman.</p><h2>Gejala dan Fakta Medis Kelelahan Mata</h2><p>Data klinis menunjukkan bahwa individu yang menatap layar lebih dari tiga jam berturut-turut berisiko tinggi mengalami ketidaknyamanan mata. Gejalanya meliputi mata terasa kering, perih, kemerahan, sakit kepala bagian depan, hingga rasa kaku pada tengkuk leher. Secara medis, ketika Anda fokus pada monitor, frekuensi kedipan mata menurun drastis dari lima belas kali per menit menjadi hanya sekitar lima kali. Penurunan frekuensi ini menyebabkan lapisan pelumas mata (tear film) yang melindungi kornea menguap dengan sangat cepat.</p><h2>Mekanisme Kerusakan Jangka Panjang</h2><p>Selain masalah berkurangnya pelumasan, otot siliaris di dalam mata yang bertugas memfokuskan lensa pada jarak dekat akan mengalami kelelahan kronis akibat kontraksi yang dipertahankan terus-menerus. Paparan cahaya biru bergelombang pendek dari monitor juga menembus langsung ke area retina. Jika terpapar dalam intensitas tinggi jangka panjang, kondisi ini dikhawatirkan mempercepat penuaan sel retina dan mengganggu ritme sirkadian tubuh, sehingga memicu gangguan kualitas tidur pada malam hari.</p><h2>Langkah-langkah Solutif dan Pencegahan</h2><p>Mencegah kerusakan indera penglihatan di tempat kerja memerlukan rutinitas yang proaktif. Berikut tindakan pencegahan komprehensif untuk rutinitas kerja Anda:</p><ul><li><b>Atur Pencahayaan Meja:</b> Hindari lampu ruangan yang menyilaukan atau posisi monitor yang memantulkan cahaya dari jendela. Pasang filter pelindung anti-silau pada layar jika diperlukan.</li><li><b>Kalibrasi Layar Monitor:</b> Turunkan tingkat kecerahan dan kontras agar menyerupai kondisi cahaya ruangan sekitarnya. Aktifkan mode proteksi mata untuk mengurangi emisi cahaya biru di sore hari.</li><li><b>Terapkan Aturan 20-20-20:</b> Setiap dua puluh menit bekerja, alihkan pandangan mata ke objek nyata sejauh minimal enam meter selama dua puluh detik untuk merelaksasi otot siliaris.</li><li><b>Gunakan Pelumas Mata:</b> Sediakan obat tetes air mata buatan (artificial tears) di meja kerja untuk membasahi kornea mata secara berkala, terutama di ruangan ber-AC.</li></ul><p>Kesehatan penglihatan merupakan aset krusial bagi jenjang karier Anda. Dengan langkah ergonomis visual dan jadwal istirahat yang disiplin, Anda melindungi mata dari kerusakan permanen.</p>",
+    "featured": false
   }
 ]

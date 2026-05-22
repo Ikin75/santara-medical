@@ -1,0 +1,118 @@
+<!-- PREMIUM HEADER -->
+<header
+  id="header"
+  class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
+>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative">
+    <div
+      class="mt-5 bg-white/70 dark:bg-[#151515]/70 backdrop-blur-2xl border border-gray-200/50 dark:border-white/10 rounded-3xl px-8 h-20 flex items-center justify-between shadow-xl dark:shadow-2xl transition-all duration-300"
+      id="headerInner"
+    >
+      <!-- LOGO -->
+      <a
+        href="index.html"
+        class="flex items-center gap-3 text-3xl font-extrabold tracking-tight relative z-10 group"
+      >
+        <img
+          src="./images/logo.png"
+          alt="Logo Santara Medical"
+          class="w-10 h-10 object-contain group-hover:rotate-12 transition-transform duration-300"
+        />
+
+        <div>
+          <span class="text-orange-500">Santara</span>
+          <span class="text-gray-900 dark:text-white">Medical</span>
+        </div>
+      </a>
+
+      <!-- MENU DESKTOP -->
+      <nav
+        class="hidden lg:flex items-center gap-10 text-gray-700 dark:text-gray-200 font-medium relative z-10"
+      >
+        <a href="#" class="nav-link hover:text-orange-500 transition">Home</a>
+        <a href="#about" class="nav-link hover:text-orange-500 transition"
+          >Tentang</a
+        >
+        <a href="#services" class="nav-link hover:text-orange-500 transition"
+          >Layanan</a
+        >
+        <a href="#articles" class="nav-link hover:text-orange-500 transition"
+          >Artikel</a
+        >
+        <a href="#contact" class="nav-link hover:text-orange-500 transition"
+          >Kontak</a
+        >
+      </nav>
+
+      <!-- RIGHT ACTIONS -->
+      <div class="flex items-center gap-4 relative z-10">
+        <!-- DARK MODE BUTTON -->
+        <button
+          id="darkToggle"
+          class="hidden lg:flex w-12 h-12 rounded-2xl bg-gray-100/80 dark:bg-[#151515]/80 backdrop-blur-sm border border-gray-200 dark:border-white/10 items-center justify-center text-xl hover:bg-orange-500 hover:text-white transition"
+        >
+          🌙
+        </button>
+
+        <!-- ✅ ANIMATED GRADIENT BUTTON -->
+        <a
+          href="#contact"
+          class="hidden lg:flex btn-gradient text-white px-7 py-3 rounded-2xl font-semibold shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:-translate-y-1 transform transition-all duration-300"
+        >
+          Konsultasi
+        </a>
+
+        <!-- MOBILE MENU BUTTON -->
+        <button
+          id="menuBtn"
+          class="lg:hidden text-gray-900 dark:text-white text-3xl focus:outline-none z-[70] relative"
+        >
+          ☰
+        </button>
+      </div>
+    </div>
+
+    <!-- ✅ BETTER MOBILE MENU (Off-Canvas overlay) -->
+    <div
+      id="mobileOverlay"
+      class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-500"
+    ></div>
+    <div
+      id="mobileMenu"
+      class="fixed top-0 right-0 h-screen w-80 bg-white/90 dark:bg-[#151515]/90 backdrop-blur-3xl shadow-2xl p-8 border-l border-gray-200 dark:border-white/10 flex flex-col gap-6 z-[65] transform translate-x-full transition-transform duration-500 ease-in-out pt-28"
+    >
+      <a
+        href="#"
+        class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
+        >Home</a
+      >
+      <a
+        href="#about"
+        class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
+        >Tentang</a
+      >
+      <a
+        href="#services"
+        class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
+        >Layanan</a
+      >
+      <a
+        href="#articles"
+        class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
+        >Artikel</a
+      >
+      <a
+        href="#contact"
+        class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
+        >Kontak</a
+      >
+      <div class="h-px w-full bg-gray-200 dark:bg-white/10 my-4"></div>
+      <button
+        id="darkToggleMobile"
+        class="w-full bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-orange-500 hover:text-white transition"
+      >
+        🌙 Toggle Tema
+      </button>
+    </div>
+  </div>
+</header>
