@@ -25,6 +25,16 @@
       html {
         scroll-behavior: smooth;
       }
+      .reveal {
+        opacity: 0;
+        transform: translateY(80px);
+        transition: all 1s ease;
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
     </style>
   </head>
 
@@ -32,7 +42,10 @@
     class="bg-gray-50 dark:bg-[#0f0f0f] text-gray-800 dark:text-gray-200 transition-colors duration-500"
   >
     <!-- PREMIUM HEADER -->
-    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <header
+      id="header"
+      class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
+    >
       <div class="max-w-7xl mx-auto px-6 lg:px-10 relative">
         <div
           class="mt-5 bg-white/80 dark:bg-[#151515]/80 backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-3xl px-8 h-20 flex items-center justify-between shadow-xl dark:shadow-2xl"
@@ -48,7 +61,10 @@
             class="hidden lg:flex items-center gap-10 text-gray-700 dark:text-white font-medium"
           >
             <a href="#" class="hover:text-orange-500 transition">Home</a>
-            <a href="#about" class="hover:text-orange-500 transition"
+            <a
+              href="#about"
+              class="nav-link"
+              class="hover:text-orange-500 transition"
               >Tentang</a
             >
             <a href="#services" class="hover:text-orange-500 transition"
@@ -74,7 +90,7 @@
 
             <a
               href="#contact"
-              class="hidden lg:flex bg-orange-500 hover:bg-orange-600 transition text-white px-7 py-3 rounded-2xl font-semibold shadow-lg shadow-orange-500/30"
+              class="hidden lg:flex bg-orange-500 hover:bg-orange-600 transition text-white px-7 py-3 rounded-2xl font-semibold shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50"
             >
               Konsultasi
             </a>
@@ -131,7 +147,9 @@
     </header>
 
     <!-- PREMIUM HERO -->
-    <section class="relative min-h-screen overflow-hidden flex items-center">
+    <section
+      class="relative min-h-screen overflow-hidden flex items-center reveal"
+    >
       <!-- BACKGROUND -->
       <img
         src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=1600&auto=format&fit=crop"
@@ -184,7 +202,7 @@
             >
               <a
                 href="#services"
-                class="bg-orange-500 hover:bg-orange-600 transition text-white px-9 py-4 rounded-2xl font-bold shadow-2xl shadow-orange-500/30 text-lg w-full sm:w-auto text-center"
+                class="bg-orange-500 hover:bg-orange-600 transition text-white px-9 py-4 rounded-2xl font-bold shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 text-lg w-full sm:w-auto text-center"
               >
                 Explore Services
               </a>
@@ -277,7 +295,7 @@
         <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
           <!-- CARD 1 -->
           <div
-            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-500 border border-gray-100 dark:border-gray-800"
+            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500 border border-gray-100 dark:border-gray-800"
           >
             <div
               class="w-16 h-16 rounded-2xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
@@ -294,7 +312,7 @@
           </div>
           <!-- CARD 2 -->
           <div
-            class="group bg-gray-900 text-white rounded-[32px] p-8 shadow-2xl hover:-translate-y-2 transition duration-500"
+            class="group bg-gray-900 text-white rounded-[32px] p-8 shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500"
           >
             <div
               class="w-16 h-16 rounded-2xl bg-orange-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
@@ -309,7 +327,7 @@
           </div>
           <!-- CARD 3 -->
           <div
-            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-500 border border-gray-100 dark:border-gray-800"
+            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500 border border-gray-100 dark:border-gray-800"
           >
             <div
               class="w-16 h-16 rounded-2xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
@@ -324,7 +342,7 @@
           </div>
           <!-- CARD 4 -->
           <div
-            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-500 border border-gray-100 dark:border-gray-800"
+            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500 border border-gray-100 dark:border-gray-800"
           >
             <div
               class="w-16 h-16 rounded-2xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
@@ -904,7 +922,17 @@
     >
       💬
     </a>
+    <div
+      class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none"
+    >
+      <div
+        class="absolute top-20 left-20 w-72 h-72 bg-orange-500/10 blur-[120px] rounded-full animate-pulse"
+      ></div>
 
+      <div
+        class="absolute bottom-20 right-20 w-72 h-72 bg-orange-400/10 blur-[120px] rounded-full animate-pulse"
+      ></div>
+    </div>
     <!-- SCRIPT -->
     <script>
       // Menu Mobile Toggle
@@ -956,5 +984,58 @@
     <!-- Eksternal JS Biarkan Saja Sesuai Format Asli -->
     <script src="./js/articles.js"></script>
     <script src="./js/home-articles.js"></script>
+    <script>
+      const header = document.getElementById("header");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          header.classList.add("py-2");
+        } else {
+          header.classList.remove("py-2");
+        }
+      });
+    </script>
+    <script>
+      const reveals = document.querySelectorAll(".reveal");
+
+      window.addEventListener("scroll", revealSections);
+
+      function revealSections() {
+        reveals.forEach((section) => {
+          const windowHeight = window.innerHeight;
+          const revealTop = section.getBoundingClientRect().top;
+
+          if (revealTop < windowHeight - 100) {
+            section.classList.add("active");
+          }
+        });
+      }
+
+      revealSections();
+    </script>
+    <script>
+      const sections = document.querySelectorAll("section");
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop;
+
+          if (scrollY >= sectionTop - 200) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navLinks.forEach((link) => {
+          link.classList.remove("text-orange-400");
+
+          if (link.getAttribute("href") == "#" + current) {
+            link.classList.add("text-orange-400");
+          }
+        });
+      });
+    </script>
   </body>
 </html>
