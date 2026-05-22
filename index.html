@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Santara Medical</title>
+    <title>Santara Medical - Premium</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -21,19 +21,131 @@
     <style>
       body {
         font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
       }
       html {
         scroll-behavior: smooth;
       }
+
+      /* 1. Reveal Animation */
       .reveal {
         opacity: 0;
         transform: translateY(80px);
-        transition: all 1s ease;
+        transition: all 1s cubic-bezier(0.5, 0, 0, 1);
       }
-
       .reveal.active {
         opacity: 1;
         transform: translateY(0);
+      }
+
+      /* 2. Premium Loading Screen */
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition:
+          opacity 0.6s ease,
+          visibility 0.6s ease;
+      }
+      .dark #preloader {
+        background: #0f0f0f;
+      }
+      .loader-pulse {
+        width: 80px;
+        height: 80px;
+        background: #f97316;
+        border-radius: 50%;
+        animation: loaderAnim 1.5s infinite ease-in-out;
+      }
+      @keyframes loaderAnim {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 0;
+        }
+      }
+
+      /* 3. Glass Floating Cards */
+      .glass-float {
+        animation: floatAnim 4s ease-in-out infinite;
+      }
+      @keyframes floatAnim {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      /* 4. Animated Gradient Button */
+      .btn-gradient {
+        background-size: 200% auto;
+        background-image: linear-gradient(
+          to right,
+          #f97316 0%,
+          #ea580c 50%,
+          #fb923c 100%
+        );
+        transition: 0.5s;
+      }
+      .btn-gradient:hover {
+        background-position: right center;
+      }
+
+      /* 5. Floating WhatsApp Pulse */
+      .wa-pulse::before {
+        content: "";
+        position: absolute;
+        inset: -10px;
+        border-radius: 50%;
+        background: rgba(34, 197, 94, 0.4);
+        animation: pulseRing 2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+        z-index: -1;
+      }
+      @keyframes pulseRing {
+        0% {
+          transform: scale(0.8);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1.5);
+          opacity: 0;
+        }
+      }
+
+      /* 6. Section Divider Gradient */
+      .premium-divider {
+        height: 1px;
+        width: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(249, 115, 22, 0.5),
+          transparent
+        );
+        margin: 0;
+      }
+
+      /* 7. Smooth Image Zoom (Image Wrapper) */
+      .zoom-wrapper {
+        overflow: hidden;
+      }
+      .zoom-wrapper img {
+        transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .zoom-wrapper:hover img {
+        transform: scale(1.08);
       }
     </style>
   </head>
@@ -41,56 +153,73 @@
   <body
     class="bg-gray-50 dark:bg-[#0f0f0f] text-gray-800 dark:text-gray-200 transition-colors duration-500"
   >
+    <!-- ✅ PREMIUM LOADING SCREEN -->
+    <div id="preloader">
+      <div class="loader-pulse"></div>
+    </div>
+
+    <!-- ✅ MOUSE GLOW EFFECT -->
+    <div
+      id="mouseGlow"
+      class="pointer-events-none fixed w-[400px] h-[400px] bg-orange-500/10 dark:bg-orange-500/20 blur-[100px] rounded-full z-0 transition-transform duration-75 ease-out mix-blend-screen"
+      style="transform: translate(-50%, -50%); display: none"
+    ></div>
+
     <!-- PREMIUM HEADER -->
     <header
       id="header"
-      class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
+      class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
     >
       <div class="max-w-7xl mx-auto px-6 lg:px-10 relative">
         <div
-          class="mt-5 bg-white/80 dark:bg-[#151515]/80 backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-3xl px-8 h-20 flex items-center justify-between shadow-xl dark:shadow-2xl"
+          class="mt-5 bg-white/70 dark:bg-[#151515]/70 backdrop-blur-2xl border border-gray-200/50 dark:border-white/10 rounded-3xl px-8 h-20 flex items-center justify-between shadow-xl dark:shadow-2xl transition-all duration-300"
+          id="headerInner"
         >
           <!-- LOGO -->
-          <div class="text-3xl font-extrabold tracking-tight">
+          <div class="text-3xl font-extrabold tracking-tight relative z-10">
             <span class="text-orange-500">Santara</span>
             <span class="text-gray-900 dark:text-white">Medical</span>
           </div>
 
           <!-- MENU DESKTOP -->
           <nav
-            class="hidden lg:flex items-center gap-10 text-gray-700 dark:text-white font-medium"
+            class="hidden lg:flex items-center gap-10 text-gray-700 dark:text-gray-200 font-medium relative z-10"
           >
-            <a href="#" class="hover:text-orange-500 transition">Home</a>
-            <a
-              href="#about"
-              class="nav-link"
-              class="hover:text-orange-500 transition"
+            <a href="#" class="nav-link hover:text-orange-500 transition"
+              >Home</a
+            >
+            <a href="#about" class="nav-link hover:text-orange-500 transition"
               >Tentang</a
             >
-            <a href="#services" class="hover:text-orange-500 transition"
+            <a
+              href="#services"
+              class="nav-link hover:text-orange-500 transition"
               >Layanan</a
             >
-            <a href="#articles" class="hover:text-orange-500 transition"
+            <a
+              href="#articles"
+              class="nav-link hover:text-orange-500 transition"
               >Artikel</a
             >
-            <a href="#contact" class="hover:text-orange-500 transition"
+            <a href="#contact" class="nav-link hover:text-orange-500 transition"
               >Kontak</a
             >
           </nav>
 
           <!-- RIGHT ACTIONS -->
-          <div class="flex items-center gap-4">
-            <!-- DARK MODE BUTTON DESKTOP -->
+          <div class="flex items-center gap-4 relative z-10">
+            <!-- DARK MODE BUTTON -->
             <button
               id="darkToggle"
-              class="hidden lg:flex w-12 h-12 rounded-2xl bg-gray-100 dark:bg-[#151515]/50 border border-gray-200 dark:border-white/10 items-center justify-center text-xl hover:bg-orange-500 hover:text-white transition"
+              class="hidden lg:flex w-12 h-12 rounded-2xl bg-gray-100/80 dark:bg-[#151515]/80 backdrop-blur-sm border border-gray-200 dark:border-white/10 items-center justify-center text-xl hover:bg-orange-500 hover:text-white transition"
             >
               🌙
             </button>
 
+            <!-- ✅ ANIMATED GRADIENT BUTTON -->
             <a
               href="#contact"
-              class="hidden lg:flex bg-orange-500 hover:bg-orange-600 transition text-white px-7 py-3 rounded-2xl font-semibold shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50"
+              class="hidden lg:flex btn-gradient text-white px-7 py-3 rounded-2xl font-semibold shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:-translate-y-1 transform transition-all duration-300"
             >
               Konsultasi
             </a>
@@ -98,47 +227,51 @@
             <!-- MOBILE MENU BUTTON -->
             <button
               id="menuBtn"
-              class="lg:hidden text-gray-900 dark:text-white text-3xl focus:outline-none"
+              class="lg:hidden text-gray-900 dark:text-white text-3xl focus:outline-none z-[70] relative"
             >
               ☰
             </button>
           </div>
         </div>
 
-        <!-- MOBILE MENU DROPDOWN -->
+        <!-- ✅ BETTER MOBILE MENU (Off-Canvas overlay) -->
+        <div
+          id="mobileOverlay"
+          class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-500"
+        ></div>
         <div
           id="mobileMenu"
-          class="hidden lg:hidden absolute top-28 left-6 right-6 bg-white dark:bg-[#151515] rounded-3xl shadow-2xl p-6 border border-gray-100 dark:border-white/10 flex flex-col gap-4 z-50"
+          class="fixed top-0 right-0 h-screen w-80 bg-white/90 dark:bg-[#151515]/90 backdrop-blur-3xl shadow-2xl p-8 border-l border-gray-200 dark:border-white/10 flex flex-col gap-6 z-[65] transform translate-x-full transition-transform duration-500 ease-in-out pt-28"
         >
           <a
             href="#"
-            class="text-gray-800 dark:text-white hover:text-orange-500 font-medium text-lg"
+            class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
             >Home</a
           >
           <a
             href="#about"
-            class="text-gray-800 dark:text-white hover:text-orange-500 font-medium text-lg"
+            class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
             >Tentang</a
           >
           <a
             href="#services"
-            class="text-gray-800 dark:text-white hover:text-orange-500 font-medium text-lg"
+            class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
             >Layanan</a
           >
           <a
             href="#articles"
-            class="text-gray-800 dark:text-white hover:text-orange-500 font-medium text-lg"
+            class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
             >Artikel</a
           >
           <a
             href="#contact"
-            class="text-gray-800 dark:text-white hover:text-orange-500 font-medium text-lg"
+            class="text-gray-800 dark:text-white hover:text-orange-500 font-bold text-2xl transition"
             >Kontak</a
           >
-          <div class="h-px w-full bg-gray-200 dark:bg-white/10 my-2"></div>
+          <div class="h-px w-full bg-gray-200 dark:bg-white/10 my-4"></div>
           <button
             id="darkToggleMobile"
-            class="w-full bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-orange-500 hover:text-white transition"
+            class="w-full bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-orange-500 hover:text-white transition"
           >
             🌙 Toggle Tema
           </button>
@@ -147,28 +280,24 @@
     </header>
 
     <!-- PREMIUM HERO -->
-    <section
-      class="relative min-h-screen overflow-hidden flex items-center reveal"
-    >
-      <!-- BACKGROUND -->
-      <img
-        src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=1600&auto=format&fit=crop"
-        class="absolute inset-0 w-full h-full object-cover scale-110"
-      />
+    <section class="relative min-h-screen overflow-hidden flex items-center">
+      <!-- ✅ PARALLAX HERO EFFECT -->
+      <div class="absolute inset-0 w-full h-full">
+        <img
+          id="heroBg"
+          src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=1600&auto=format&fit=crop"
+          class="w-full h-full object-cover scale-110 will-change-transform"
+        />
+      </div>
       <!-- OVERLAY -->
       <div
         class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/50"
       ></div>
-      <!-- ORANGE GLOW -->
-      <div
-        class="absolute top-0 left-0 w-[500px] h-[500px] bg-orange-500/30 blur-[120px] rounded-full"
-      ></div>
-      <div
-        class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-orange-400/20 blur-[120px] rounded-full"
-      ></div>
 
       <!-- CONTENT -->
-      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-32 w-full">
+      <div
+        class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-32 w-full reveal"
+      >
         <div class="grid lg:grid-cols-2 gap-20 items-center">
           <!-- LEFT -->
           <div>
@@ -194,38 +323,50 @@
             >
               Santara Medical menghadirkan layanan kesehatan modern, cepat,
               profesional, dan terpercaya untuk perusahaan maupun keluarga
-              dengan standar healthcare premium.
+              dengan standar premium.
             </p>
 
             <div
               class="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-14"
             >
+              <!-- ✅ ANIMATED GRADIENT BUTTON -->
               <a
                 href="#services"
-                class="bg-orange-500 hover:bg-orange-600 transition text-white px-9 py-4 rounded-2xl font-bold shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 text-lg w-full sm:w-auto text-center"
+                class="btn-gradient text-white px-9 py-4 rounded-2xl font-bold shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 hover:-translate-y-1 transition-all text-lg w-full sm:w-auto text-center"
               >
                 Explore Services
               </a>
               <a
                 href="#articles"
-                class="bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/10 transition text-white px-9 py-4 rounded-2xl font-semibold text-lg w-full sm:w-auto text-center"
+                class="bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/10 text-white px-9 py-4 rounded-2xl font-semibold text-lg w-full sm:w-auto text-center hover:-translate-y-1 transition-all"
               >
                 Read Articles
               </a>
             </div>
 
-            <div class="flex flex-wrap items-center gap-8 text-white/80">
+            <!-- ✅ ANIMATED STATISTICS COUNTER -->
+            <div class="flex flex-wrap items-center gap-10 text-white/80">
               <div>
-                <h3 class="text-3xl font-bold text-white">10+</h3>
-                <p class="text-sm">Years Experience</p>
+                <h3 class="text-4xl font-black text-white flex items-center">
+                  <span class="counter" data-target="10">0</span>+
+                </h3>
+                <p class="text-sm mt-1">Years Experience</p>
               </div>
               <div>
-                <h3 class="text-3xl font-bold text-white">500+</h3>
-                <p class="text-sm">Corporate Clients</p>
+                <h3 class="text-4xl font-black text-white flex items-center">
+                  <span class="counter" data-target="500">0</span>+
+                </h3>
+                <p class="text-sm mt-1">Corporate Clients</p>
               </div>
               <div>
-                <h3 class="text-3xl font-bold text-white">24/7</h3>
-                <p class="text-sm">Support Service</p>
+                <h3 class="text-4xl font-black text-white flex items-center">
+                  <span class="counter" data-target="24">0</span>/<span
+                    class="counter"
+                    data-target="7"
+                    >0</span
+                  >
+                </h3>
+                <p class="text-sm mt-1">Support Service</p>
               </div>
             </div>
           </div>
@@ -235,16 +376,21 @@
             <div
               class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] p-8 shadow-2xl"
             >
-              <img
-                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop"
-                class="rounded-3xl h-[450px] w-full object-cover"
-              />
+              <!-- ✅ SMOOTH IMAGE ZOOM -->
+              <div class="zoom-wrapper rounded-3xl">
+                <img
+                  src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop"
+                  class="h-[450px] w-full object-cover"
+                />
+              </div>
+
+              <!-- ✅ GLASS FLOATING CARD -->
               <div
-                class="absolute -bottom-8 -left-8 bg-white dark:bg-[#151515] rounded-3xl p-6 shadow-2xl w-64 border border-gray-100 dark:border-gray-800"
+                class="glass-float absolute -bottom-8 -left-8 bg-white/90 dark:bg-[#151515]/90 backdrop-blur-xl rounded-3xl p-6 shadow-2xl w-64 border border-gray-100 dark:border-white/10"
               >
                 <div class="flex items-center gap-4">
                   <div
-                    class="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center text-2xl"
+                    class="w-14 h-14 rounded-2xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-2xl"
                   >
                     🏥
                   </div>
@@ -252,7 +398,9 @@
                     <h3 class="font-bold text-xl dark:text-white">
                       Premium Care
                     </h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm">
+                    <p
+                      class="text-gray-500 dark:text-gray-400 text-sm font-medium"
+                    >
                       Trusted Healthcare
                     </p>
                   </div>
@@ -264,9 +412,12 @@
       </div>
     </section>
 
+    <!-- ✅ SECTION DIVIDER PREMIUM -->
+    <div class="premium-divider"></div>
+
     <!-- WHY CHOOSE US -->
     <section
-      class="relative py-28 px-6 bg-white dark:bg-[#151515] overflow-hidden"
+      class="relative py-28 px-6 bg-white dark:bg-[#151515] overflow-hidden reveal"
     >
       <div
         class="absolute top-0 left-0 w-[400px] h-[400px] bg-orange-100/50 dark:bg-orange-500/5 blur-[120px] rounded-full pointer-events-none"
@@ -275,14 +426,18 @@
       <div class="max-w-7xl mx-auto relative z-10">
         <div class="text-center mb-20">
           <div
-            class="inline-flex bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-6"
+            class="inline-flex bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 px-6 py-2 rounded-full font-semibold mb-6 border border-orange-100 dark:border-orange-500/20"
           >
             Why Santara Medical
           </div>
           <h2
             class="text-4xl lg:text-5xl font-black leading-tight mb-6 tracking-tight dark:text-white"
           >
-            Modern Healthcare <span class="text-orange-500">Experience</span>
+            Modern Healthcare
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600"
+              >Experience</span
+            >
           </h2>
           <p
             class="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed"
@@ -295,14 +450,19 @@
         <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
           <!-- CARD 1 -->
           <div
-            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500 border border-gray-100 dark:border-gray-800"
+            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-xl hover:shadow-2xl hover:-translate-y-4 transition-all duration-500 border border-gray-100 dark:border-white/5 relative overflow-hidden z-10"
           >
             <div
-              class="w-16 h-16 rounded-2xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
+              class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 -z-10"
+            ></div>
+            <div
+              class="w-16 h-16 rounded-2xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition duration-500"
             >
               ⚡
             </div>
-            <h3 class="text-2xl font-bold mb-4 dark:text-white">
+            <h3
+              class="text-2xl font-bold mb-4 dark:text-white group-hover:text-orange-500 transition"
+            >
               Fast Response
             </h3>
             <p class="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
@@ -310,12 +470,16 @@
               maupun personal.
             </p>
           </div>
+
           <!-- CARD 2 -->
           <div
-            class="group bg-gray-900 text-white rounded-[32px] p-8 shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500"
+            class="group bg-gradient-to-br from-gray-900 to-black text-white rounded-[32px] p-8 shadow-2xl hover:-translate-y-4 transition-all duration-500 relative overflow-hidden z-10"
           >
             <div
-              class="w-16 h-16 rounded-2xl bg-orange-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
+              class="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 -z-10"
+            ></div>
+            <div
+              class="w-16 h-16 rounded-2xl bg-orange-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:-rotate-6 transition duration-500"
             >
               🏥
             </div>
@@ -325,31 +489,45 @@
               profesional terbaik.
             </p>
           </div>
+
           <!-- CARD 3 -->
           <div
-            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500 border border-gray-100 dark:border-gray-800"
+            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-xl hover:shadow-2xl hover:-translate-y-4 transition-all duration-500 border border-gray-100 dark:border-white/5 relative overflow-hidden z-10"
           >
             <div
-              class="w-16 h-16 rounded-2xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
+              class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 -z-10"
+            ></div>
+            <div
+              class="w-16 h-16 rounded-2xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition duration-500"
             >
               👨‍⚕️
             </div>
-            <h3 class="text-2xl font-bold mb-4 dark:text-white">Expert Team</h3>
+            <h3
+              class="text-2xl font-bold mb-4 dark:text-white group-hover:text-orange-500 transition"
+            >
+              Expert Team
+            </h3>
             <p class="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
               Tenaga medis profesional dan berpengalaman di bidang healthcare
               modern.
             </p>
           </div>
+
           <!-- CARD 4 -->
           <div
-            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-lg hover:shadow-2xl hover:-translate-y-4 hover:scale-[1.02] transition duration-500 border border-gray-100 dark:border-gray-800"
+            class="group bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 shadow-xl hover:shadow-2xl hover:-translate-y-4 transition-all duration-500 border border-gray-100 dark:border-white/5 relative overflow-hidden z-10"
           >
             <div
-              class="w-16 h-16 rounded-2xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"
+              class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 -z-10"
+            ></div>
+            <div
+              class="w-16 h-16 rounded-2xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:-rotate-6 transition duration-500"
             >
               🛡️
             </div>
-            <h3 class="text-2xl font-bold mb-4 dark:text-white">
+            <h3
+              class="text-2xl font-bold mb-4 dark:text-white group-hover:text-orange-500 transition"
+            >
               Trusted Service
             </h3>
             <p class="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
@@ -361,33 +539,36 @@
       </div>
     </section>
 
+    <div class="premium-divider"></div>
+
     <!-- ABOUT -->
-    <section id="about" class="py-24 px-6 bg-gray-50 dark:bg-[#0f0f0f]">
+    <section id="about" class="py-24 px-6 bg-gray-50 dark:bg-[#0f0f0f] reveal">
       <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        <!-- IMAGE -->
         <div class="relative">
-          <img
-            src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop"
-            class="rounded-3xl shadow-2xl w-full"
-          />
+          <div class="zoom-wrapper rounded-3xl shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop"
+              class="w-full object-cover"
+            />
+          </div>
+          <!-- ✅ GLASS FLOATING CARD -->
           <div
-            class="absolute -bottom-6 -right-6 bg-orange-500 text-white p-6 rounded-3xl shadow-xl"
+            class="glass-float absolute -bottom-6 -right-6 bg-orange-500 text-white p-8 rounded-3xl shadow-2xl border border-orange-400/50"
           >
-            <h3 class="text-3xl font-bold mb-1">10+</h3>
-            <p class="text-sm font-medium">Tahun Profesional</p>
+            <h3 class="text-4xl font-black mb-1 flex items-center">
+              <span class="counter" data-target="10">0</span>+
+            </h3>
+            <p class="text-sm font-medium opacity-90">Tahun Profesional</p>
           </div>
         </div>
 
-        <!-- TEXT -->
         <div>
           <div
             class="inline-block bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-6"
           >
             Tentang Santara
           </div>
-          <h2
-            class="text-4xl font-extrabold leading-tight mb-6 dark:text-white"
-          >
+          <h2 class="text-4xl font-black leading-tight mb-6 dark:text-white">
             Solusi Kesehatan Modern untuk Perusahaan & Keluarga
           </h2>
           <p
@@ -406,42 +587,51 @@
 
           <div class="flex flex-wrap gap-4">
             <div
-              class="bg-white dark:bg-[#1f1f1f] shadow-md border border-gray-100 dark:border-gray-800 rounded-2xl px-5 py-3 font-medium dark:text-gray-200"
+              class="bg-white dark:bg-[#1f1f1f] shadow-lg border border-gray-100 dark:border-white/5 rounded-2xl px-6 py-4 font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3"
             >
-              ✅ Tenaga Profesional
+              <span
+                class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm"
+                >✔</span
+              >
+              Tenaga Profesional
             </div>
             <div
-              class="bg-white dark:bg-[#1f1f1f] shadow-md border border-gray-100 dark:border-gray-800 rounded-2xl px-5 py-3 font-medium dark:text-gray-200"
+              class="bg-white dark:bg-[#1f1f1f] shadow-lg border border-gray-100 dark:border-white/5 rounded-2xl px-6 py-4 font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3"
             >
-              ✅ Layanan Cepat
+              <span
+                class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm"
+                >✔</span
+              >
+              Layanan Cepat
             </div>
             <div
-              class="bg-white dark:bg-[#1f1f1f] shadow-md border border-gray-100 dark:border-gray-800 rounded-2xl px-5 py-3 font-medium dark:text-gray-200"
+              class="bg-white dark:bg-[#1f1f1f] shadow-lg border border-gray-100 dark:border-white/5 rounded-2xl px-6 py-4 font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3"
             >
-              ✅ Corporate Trusted
+              <span
+                class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm"
+                >✔</span
+              >
+              Corporate Trusted
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <div class="premium-divider"></div>
+
     <!-- PREMIUM SERVICES -->
     <section
       id="services"
-      class="relative py-28 px-6 bg-white dark:bg-[#151515] overflow-hidden"
+      class="relative py-28 px-6 bg-white dark:bg-[#151515] overflow-hidden reveal"
     >
-      <div
-        class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-200/40 dark:bg-orange-500/5 blur-[120px] rounded-full pointer-events-none"
-      ></div>
-
       <div class="max-w-7xl mx-auto relative z-10">
-        <!-- TITLE -->
         <div
           class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16"
         >
           <div class="max-w-2xl">
             <div
-              class="inline-flex bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-6"
+              class="inline-flex bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-6 border border-orange-100 dark:border-orange-500/20"
             >
               Premium Healthcare Services
             </div>
@@ -449,32 +639,37 @@
               class="text-4xl lg:text-5xl font-black leading-tight mb-6 tracking-tight dark:text-white"
             >
               Healthcare Solutions
-              <span class="text-orange-500">For Everyone</span>
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600"
+                >For Everyone</span
+              >
             </h2>
             <p class="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
               Santara Medical menyediakan layanan kesehatan modern, profesional,
               dan terpercaya untuk kebutuhan perusahaan maupun personal.
             </p>
           </div>
+          <!-- ✅ ANIMATED GRADIENT BUTTON -->
           <a
             href="#contact"
-            class="group inline-flex items-center gap-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-orange-500 dark:hover:bg-orange-500 hover:text-white transition px-8 py-4 rounded-2xl font-bold shadow-lg"
+            class="group inline-flex items-center gap-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-orange-500 dark:hover:bg-orange-500 hover:text-white transition-all duration-300 px-8 py-4 rounded-2xl font-bold shadow-xl hover:-translate-y-1"
           >
             Consultation Now
-            <span class="group-hover:translate-x-1 transition">→</span>
+            <span class="group-hover:translate-x-1 transition-transform"
+              >→</span
+            >
           </a>
         </div>
 
-        <!-- GRID -->
         <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
           <!-- SERVICE 1 -->
           <div
-            class="group relative rounded-[32px] overflow-hidden bg-gray-50 dark:bg-[#1f1f1f] shadow-lg hover:shadow-2xl transition duration-500 hover:-translate-y-2 border border-gray-100 dark:border-gray-800"
+            class="group relative rounded-[32px] overflow-hidden bg-gray-50 dark:bg-[#1f1f1f] shadow-xl hover:shadow-2xl transition duration-500 hover:-translate-y-3 border border-gray-100 dark:border-white/5"
           >
-            <div class="relative overflow-hidden">
+            <div class="zoom-wrapper h-64">
               <img
                 src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200&auto=format&fit=crop"
-                class="w-full h-64 object-cover group-hover:scale-110 transition duration-700"
+                class="w-full h-full object-cover"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
@@ -499,7 +694,7 @@
               </p>
               <a
                 href="#"
-                class="inline-flex items-center gap-2 text-orange-500 font-bold"
+                class="inline-flex items-center gap-2 text-orange-500 font-bold group-hover:gap-3 transition-all"
                 >Learn More <span>→</span></a
               >
             </div>
@@ -507,31 +702,35 @@
 
           <!-- SERVICE 2 -->
           <div
-            class="group relative rounded-[32px] overflow-hidden bg-gray-900 text-white shadow-xl hover:-translate-y-2 transition duration-500"
+            class="group relative rounded-[32px] overflow-hidden bg-gradient-to-br from-gray-900 to-black text-white shadow-2xl hover:-translate-y-3 transition duration-500"
           >
-            <div class="relative overflow-hidden">
+            <div class="zoom-wrapper h-64">
               <img
                 src="https://images.unsplash.com/photo-1580281657527-47e2d8d8c1fb?q=80&w=1200&auto=format&fit=crop"
-                class="w-full h-64 object-cover opacity-70 group-hover:scale-110 transition duration-700"
+                class="w-full h-full object-cover opacity-60"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"
               ></div>
               <div
-                class="absolute top-6 left-6 w-14 h-14 rounded-2xl bg-orange-500 flex items-center justify-center text-2xl text-white shadow-lg"
+                class="absolute top-6 left-6 w-14 h-14 rounded-2xl bg-orange-500 flex items-center justify-center text-2xl text-white shadow-lg shadow-orange-500/50"
               >
                 🏥
               </div>
             </div>
             <div class="p-8 relative z-10">
-              <h3 class="text-2xl font-bold mb-4">Corporate Clinic</h3>
+              <h3
+                class="text-2xl font-bold mb-4 group-hover:text-orange-400 transition"
+              >
+                Corporate Clinic
+              </h3>
               <p class="text-gray-300 leading-relaxed text-sm mb-6">
                 Klinik perusahaan modern untuk mendukung produktivitas dan
                 kesehatan pekerja.
               </p>
               <a
                 href="#"
-                class="inline-flex items-center gap-2 text-orange-400 font-bold"
+                class="inline-flex items-center gap-2 text-orange-400 font-bold group-hover:gap-3 transition-all"
                 >Learn More <span>→</span></a
               >
             </div>
@@ -539,12 +738,12 @@
 
           <!-- SERVICE 3 -->
           <div
-            class="group relative rounded-[32px] overflow-hidden bg-gray-50 dark:bg-[#1f1f1f] shadow-lg hover:shadow-2xl transition duration-500 hover:-translate-y-2 border border-gray-100 dark:border-gray-800"
+            class="group relative rounded-[32px] overflow-hidden bg-gray-50 dark:bg-[#1f1f1f] shadow-xl hover:shadow-2xl transition duration-500 hover:-translate-y-3 border border-gray-100 dark:border-white/5"
           >
-            <div class="relative overflow-hidden">
+            <div class="zoom-wrapper h-64">
               <img
                 src="https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=1200&auto=format&fit=crop"
-                class="w-full h-64 object-cover group-hover:scale-110 transition duration-700"
+                class="w-full h-full object-cover"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
@@ -569,7 +768,7 @@
               </p>
               <a
                 href="#"
-                class="inline-flex items-center gap-2 text-orange-500 font-bold"
+                class="inline-flex items-center gap-2 text-orange-500 font-bold group-hover:gap-3 transition-all"
                 >Learn More <span>→</span></a
               >
             </div>
@@ -578,16 +777,21 @@
       </div>
     </section>
 
+    <div class="premium-divider"></div>
+
     <!-- SEARCH ARTICLE -->
-    <section id="articles" class="py-24 px-6 bg-gray-50 dark:bg-[#0f0f0f]">
+    <section
+      id="articles"
+      class="py-24 px-6 bg-gray-50 dark:bg-[#0f0f0f] reveal"
+    >
       <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-12">
+        <div class="text-center mb-16">
           <div
-            class="inline-block bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-5"
+            class="inline-block bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-5 border border-orange-200 dark:border-orange-500/30"
           >
             Artikel Kesehatan
           </div>
-          <h2 class="text-4xl font-extrabold mb-6 dark:text-white">
+          <h2 class="text-4xl lg:text-5xl font-black mb-6 dark:text-white">
             Edukasi & Informasi Kesehatan
           </h2>
           <p class="text-gray-500 dark:text-gray-400 text-lg">
@@ -595,26 +799,28 @@
           </p>
         </div>
 
-        <!-- SEARCH -->
         <div class="mb-14">
-          <div class="relative max-w-2xl mx-auto">
+          <div class="relative max-w-2xl mx-auto group">
             <input
               type="text"
               id="searchInput"
               placeholder="Cari artikel kesehatan..."
-              class="w-full py-4 px-6 rounded-2xl border border-gray-200 dark:border-gray-700 dark:bg-[#1f1f1f] dark:text-white shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-lg transition"
+              class="w-full py-5 px-7 rounded-2xl border border-gray-200 dark:border-white/10 dark:bg-[#151515] dark:text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/20 text-lg transition-all"
             />
+            <span
+              class="absolute right-6 top-1/2 -translate-y-1/2 text-2xl text-gray-400 group-focus-within:text-orange-500 transition"
+              >🔍</span
+            >
           </div>
         </div>
 
-        <!-- ARTICLE GRID (Statically Populated for preview) -->
         <div id="homeArticles" class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
-          <!-- Article Placeholder 1 -->
+          <!-- Article 1 -->
           <div
-            class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-md border border-gray-100 dark:border-gray-800"
+            class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100 dark:border-white/5 group"
           >
             <div
-              class="h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-5 overflow-hidden"
+              class="zoom-wrapper h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6"
             >
               <img
                 src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800&auto=format&fit=crop"
@@ -622,27 +828,34 @@
                 alt="Kesehatan"
               />
             </div>
-            <span class="text-orange-500 text-sm font-bold"
-              >Kesehatan Jantung</span
+            <span
+              class="text-orange-500 text-xs font-bold uppercase tracking-wider bg-orange-50 dark:bg-orange-500/10 px-3 py-1 rounded-md"
+              >Jantung</span
             >
-            <h3 class="text-xl font-bold mt-2 mb-3 dark:text-white">
+            <h3
+              class="text-xl font-bold mt-4 mb-3 dark:text-white group-hover:text-orange-500 transition"
+            >
               Pentingnya Cek Rutin Jantung di Usia Muda
             </h3>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">
+            <p
+              class="text-gray-500 dark:text-gray-400 text-sm mb-5 leading-relaxed"
+            >
               Menjaga kesehatan jantung tidak hanya untuk lansia, anak muda juga
               wajib memantaunya...
             </p>
-            <a href="#" class="text-orange-500 font-medium hover:underline"
-              >Baca Selengkapnya</a
+            <a
+              href="#"
+              class="text-gray-900 dark:text-white font-bold hover:text-orange-500 transition flex items-center gap-2"
+              >Baca Selengkapnya
+              <span class="group-hover:translate-x-1 transition">→</span></a
             >
           </div>
-
-          <!-- Article Placeholder 2 -->
+          <!-- Article 2 -->
           <div
-            class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-md border border-gray-100 dark:border-gray-800"
+            class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100 dark:border-white/5 group"
           >
             <div
-              class="h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-5 overflow-hidden"
+              class="zoom-wrapper h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6"
             >
               <img
                 src="https://images.unsplash.com/photo-1498837167922-41cfa6f318ba?q=80&w=800&auto=format&fit=crop"
@@ -650,27 +863,34 @@
                 alt="Gizi"
               />
             </div>
-            <span class="text-orange-500 text-sm font-bold"
-              >Nutrisi & Gizi</span
+            <span
+              class="text-orange-500 text-xs font-bold uppercase tracking-wider bg-orange-50 dark:bg-orange-500/10 px-3 py-1 rounded-md"
+              >Nutrisi</span
             >
-            <h3 class="text-xl font-bold mt-2 mb-3 dark:text-white">
+            <h3
+              class="text-xl font-bold mt-4 mb-3 dark:text-white group-hover:text-orange-500 transition"
+            >
               Makanan Super untuk Imunitas Tubuh
             </h3>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">
+            <p
+              class="text-gray-500 dark:text-gray-400 text-sm mb-5 leading-relaxed"
+            >
               Ketahui daftar makanan yang dapat meningkatkan daya tahan tubuhmu
-              secara alami dan sehat...
+              secara alami...
             </p>
-            <a href="#" class="text-orange-500 font-medium hover:underline"
-              >Baca Selengkapnya</a
+            <a
+              href="#"
+              class="text-gray-900 dark:text-white font-bold hover:text-orange-500 transition flex items-center gap-2"
+              >Baca Selengkapnya
+              <span class="group-hover:translate-x-1 transition">→</span></a
             >
           </div>
-
-          <!-- Article Placeholder 3 -->
+          <!-- Article 3 -->
           <div
-            class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-md border border-gray-100 dark:border-gray-800"
+            class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100 dark:border-white/5 group"
           >
             <div
-              class="h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-5 overflow-hidden"
+              class="zoom-wrapper h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6"
             >
               <img
                 src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800&auto=format&fit=crop"
@@ -678,24 +898,34 @@
                 alt="Olahraga"
               />
             </div>
-            <span class="text-orange-500 text-sm font-bold">Kebugaran</span>
-            <h3 class="text-xl font-bold mt-2 mb-3 dark:text-white">
+            <span
+              class="text-orange-500 text-xs font-bold uppercase tracking-wider bg-orange-50 dark:bg-orange-500/10 px-3 py-1 rounded-md"
+              >Kebugaran</span
+            >
+            <h3
+              class="text-xl font-bold mt-4 mb-3 dark:text-white group-hover:text-orange-500 transition"
+            >
               Olahraga Ringan Saat Bekerja di Kantor
             </h3>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">
+            <p
+              class="text-gray-500 dark:text-gray-400 text-sm mb-5 leading-relaxed"
+            >
               Duduk berjam-jam tidak baik untuk postur tulang. Ikuti gerakan
-              ringan ini di meja kerja Anda...
+              ringan ini di meja kerja...
             </p>
-            <a href="#" class="text-orange-500 font-medium hover:underline"
-              >Baca Selengkapnya</a
+            <a
+              href="#"
+              class="text-gray-900 dark:text-white font-bold hover:text-orange-500 transition flex items-center gap-2"
+              >Baca Selengkapnya
+              <span class="group-hover:translate-x-1 transition">→</span></a
             >
           </div>
         </div>
 
-        <div class="text-center mt-12">
+        <div class="text-center mt-16">
           <a
             href="articles.html"
-            class="inline-block bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-orange-500 dark:hover:bg-orange-500 hover:text-white transition px-8 py-4 rounded-2xl font-bold shadow-lg"
+            class="inline-block bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-orange-500 dark:hover:bg-orange-500 hover:text-white transition-all px-8 py-4 rounded-2xl font-bold shadow-xl hover:-translate-y-1"
             >Lihat Semua Artikel</a
           >
         </div>
@@ -703,25 +933,31 @@
     </section>
 
     <!-- CTA -->
-    <section class="py-24 px-6 bg-white dark:bg-[#151515]">
+    <section class="py-24 px-6 bg-white dark:bg-[#151515] reveal">
       <div
-        class="max-w-6xl mx-auto bg-gradient-to-r from-orange-500 to-orange-600 rounded-[40px] p-12 lg:p-16 text-center text-white shadow-2xl relative overflow-hidden"
+        class="max-w-6xl mx-auto btn-gradient rounded-[40px] p-12 lg:p-20 text-center text-white shadow-2xl relative overflow-hidden"
       >
         <div
-          class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"
+          class="absolute top-0 right-0 w-80 h-80 bg-white/20 rounded-full blur-3xl mix-blend-overlay"
         ></div>
-        <h2 class="text-4xl lg:text-5xl font-extrabold mb-6 relative z-10">
+        <div
+          class="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full blur-2xl"
+        ></div>
+
+        <h2
+          class="text-4xl lg:text-6xl font-black mb-6 relative z-10 tracking-tight"
+        >
           Siap Meningkatkan Kesehatan Perusahaan Anda?
         </h2>
         <p
-          class="text-lg lg:text-xl text-orange-100 max-w-2xl mx-auto leading-relaxed mb-10 relative z-10"
+          class="text-lg lg:text-2xl text-orange-50 max-w-3xl mx-auto leading-relaxed mb-10 relative z-10"
         >
           Santara Medical siap menjadi partner kesehatan terpercaya untuk
           kebutuhan perusahaan dan keluarga Anda.
         </p>
         <a
           href="#contact"
-          class="inline-block bg-white dark:bg-gray-900 text-orange-600 dark:text-white hover:scale-105 transition-transform px-10 py-4 rounded-2xl font-bold shadow-xl relative z-10"
+          class="inline-block bg-white dark:bg-[#111] text-orange-600 dark:text-white hover:scale-105 transition-transform duration-300 px-12 py-5 rounded-2xl font-black text-lg shadow-2xl relative z-10"
         >
           Konsultasi Sekarang
         </a>
@@ -729,16 +965,18 @@
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="py-24 bg-gray-50 dark:bg-[#0f0f0f] px-6">
+    <section
+      id="contact"
+      class="py-24 bg-gray-50 dark:bg-[#0f0f0f] px-6 reveal"
+    >
       <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        <!-- LEFT -->
         <div>
           <div
-            class="inline-block bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-5"
+            class="inline-block bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 px-5 py-2 rounded-full font-semibold mb-5 border border-orange-200 dark:border-orange-500/30"
           >
             Kontak Kami
           </div>
-          <h2 class="text-4xl lg:text-5xl font-extrabold mb-6 dark:text-white">
+          <h2 class="text-4xl lg:text-5xl font-black mb-6 dark:text-white">
             Hubungi Santara Medical
           </h2>
           <p
@@ -750,46 +988,61 @@
 
           <div class="space-y-4">
             <div
-              class="bg-white dark:bg-[#1f1f1f] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4 dark:text-gray-300"
+              class="bg-white dark:bg-[#1f1f1f] rounded-2xl p-6 shadow-md border border-gray-100 dark:border-white/5 flex items-center gap-5 dark:text-gray-300 group hover:border-orange-500/50 transition"
             >
-              <span class="text-2xl">📍</span> Jakarta, Indonesia
+              <span
+                class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-orange-500/10 text-orange-500 rounded-xl text-2xl group-hover:scale-110 transition"
+                >📍</span
+              >
+              <span class="font-medium text-lg">Jakarta, Indonesia</span>
             </div>
             <div
-              class="bg-white dark:bg-[#1f1f1f] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4 dark:text-gray-300"
+              class="bg-white dark:bg-[#1f1f1f] rounded-2xl p-6 shadow-md border border-gray-100 dark:border-white/5 flex items-center gap-5 dark:text-gray-300 group hover:border-orange-500/50 transition"
             >
-              <span class="text-2xl">📞</span> 0812-XXXX-XXXX
+              <span
+                class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-orange-500/10 text-orange-500 rounded-xl text-2xl group-hover:scale-110 transition"
+                >📞</span
+              >
+              <span class="font-medium text-lg">0812-XXXX-XXXX</span>
             </div>
             <div
-              class="bg-white dark:bg-[#1f1f1f] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4 dark:text-gray-300"
+              class="bg-white dark:bg-[#1f1f1f] rounded-2xl p-6 shadow-md border border-gray-100 dark:border-white/5 flex items-center gap-5 dark:text-gray-300 group hover:border-orange-500/50 transition"
             >
-              <span class="text-2xl">📧</span> santara@email.com
+              <span
+                class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-orange-500/10 text-orange-500 rounded-xl text-2xl group-hover:scale-110 transition"
+                >📧</span
+              >
+              <span class="font-medium text-lg">santara@email.com</span>
             </div>
           </div>
         </div>
 
-        <!-- FORM -->
         <div
-          class="bg-white dark:bg-[#1f1f1f] rounded-3xl p-8 lg:p-10 shadow-xl border border-gray-100 dark:border-gray-800"
+          class="bg-white dark:bg-[#1f1f1f] rounded-[32px] p-8 lg:p-12 shadow-2xl border border-gray-100 dark:border-white/5 relative"
         >
-          <form class="space-y-5">
+          <div
+            class="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/20 blur-[50px] rounded-full"
+          ></div>
+          <form class="space-y-6 relative z-10">
             <input
               type="text"
               placeholder="Nama Lengkap"
-              class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-[#151515] dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              class="w-full p-5 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-[#151515] dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
             />
             <input
               type="email"
               placeholder="Email"
-              class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-[#151515] dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              class="w-full p-5 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-[#151515] dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
             />
             <textarea
               rows="5"
               placeholder="Pesan"
-              class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-[#151515] dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              class="w-full p-5 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-[#151515] dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
             ></textarea>
+            <!-- ✅ ANIMATED GRADIENT BUTTON -->
             <button
               type="button"
-              class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-xl font-bold shadow-lg"
+              class="w-full btn-gradient text-white py-5 rounded-xl font-black text-lg shadow-xl hover:shadow-orange-500/50 hover:-translate-y-1 transition-all"
             >
               Kirim Pesan
             </button>
@@ -807,9 +1060,7 @@
       ></div>
 
       <div class="max-w-7xl mx-auto relative z-10">
-        <!-- MAIN FOOTER -->
         <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-12 mb-16">
-          <!-- BRAND -->
           <div>
             <h3 class="text-3xl font-black mb-6 tracking-tight">
               <span class="text-orange-500">Santara</span> Medical
@@ -821,23 +1072,21 @@
             <div class="flex items-center gap-4">
               <a
                 href="#"
-                class="w-10 h-10 rounded-xl bg-white/10 hover:bg-orange-500 transition flex items-center justify-center text-lg"
+                class="w-10 h-10 rounded-xl bg-white/10 hover:bg-orange-500 transition flex items-center justify-center text-lg hover:-translate-y-1"
                 >📸</a
               >
               <a
                 href="#"
-                class="w-10 h-10 rounded-xl bg-white/10 hover:bg-orange-500 transition flex items-center justify-center text-lg"
+                class="w-10 h-10 rounded-xl bg-white/10 hover:bg-orange-500 transition flex items-center justify-center text-lg hover:-translate-y-1"
                 >💼</a
               >
               <a
                 href="#"
-                class="w-10 h-10 rounded-xl bg-white/10 hover:bg-orange-500 transition flex items-center justify-center text-lg"
+                class="w-10 h-10 rounded-xl bg-white/10 hover:bg-orange-500 transition flex items-center justify-center text-lg hover:-translate-y-1"
                 >▶️</a
               >
             </div>
           </div>
-
-          <!-- MENU -->
           <div>
             <h4 class="text-xl font-bold mb-6">Company</h4>
             <ul class="space-y-3 text-gray-400 text-sm">
@@ -863,8 +1112,6 @@
               </li>
             </ul>
           </div>
-
-          <!-- SERVICES -->
           <div>
             <h4 class="text-xl font-bold mb-6">Services</h4>
             <ul class="space-y-3 text-gray-400 text-sm">
@@ -874,15 +1121,13 @@
               <li>Occupational Health</li>
             </ul>
           </div>
-
-          <!-- NEWSLETTER -->
           <div>
             <h4 class="text-xl font-bold mb-6">Newsletter</h4>
             <p class="text-gray-400 leading-relaxed text-sm mb-4">
               Dapatkan informasi kesehatan terbaru dari kami.
             </p>
             <div
-              class="bg-white/5 border border-white/10 rounded-xl p-2 flex items-center"
+              class="bg-white/5 border border-white/10 rounded-xl p-2 flex items-center focus-within:border-orange-500 transition"
             >
               <input
                 type="email"
@@ -890,15 +1135,13 @@
                 class="bg-transparent outline-none w-full px-3 text-sm text-white placeholder:text-gray-500"
               />
               <button
-                class="bg-orange-500 hover:bg-orange-600 transition px-4 py-2 rounded-lg font-semibold text-sm"
+                class="bg-orange-500 hover:bg-orange-600 transition px-5 py-2.5 rounded-lg font-bold text-sm"
               >
                 Kirim
               </button>
             </div>
           </div>
         </div>
-
-        <!-- BOTTOM -->
         <div
           class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-500 text-sm"
         >
@@ -915,127 +1158,204 @@
       </div>
     </footer>
 
-    <!-- FLOATING WHATSAPP -->
-    <a
-      href="#"
-      class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 transition text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-xl hover:scale-110 z-50"
-    >
-      💬
-    </a>
-    <div
-      class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none"
-    >
+    <!-- ✅ FLOATING WHATSAPP PREMIUM -->
+    <div class="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-3">
+      <!-- Tooltip / Badge -->
       <div
-        class="absolute top-20 left-20 w-72 h-72 bg-orange-500/10 blur-[120px] rounded-full animate-pulse"
-      ></div>
-
-      <div
-        class="absolute bottom-20 right-20 w-72 h-72 bg-orange-400/10 blur-[120px] rounded-full animate-pulse"
-      ></div>
+        class="bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xl border border-gray-100 dark:border-white/10 opacity-0 transform translate-y-2 transition-all duration-300 absolute -top-12 right-0 pointer-events-none"
+        id="waTooltip"
+      >
+        Butuh Bantuan?
+      </div>
+      <!-- Button -->
+      <a
+        href="#"
+        class="wa-pulse relative bg-green-500 hover:bg-green-600 transition-colors text-white w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-2xl hover:scale-110 z-50 group"
+        onmouseenter="
+          document.getElementById('waTooltip').style.opacity = 1;
+          document.getElementById('waTooltip').style.transform =
+            'translateY(0)';
+        "
+        onmouseleave="
+          document.getElementById('waTooltip').style.opacity = 0;
+          document.getElementById('waTooltip').style.transform =
+            'translateY(2px)';
+        "
+      >
+        <span class="group-hover:rotate-12 transition-transform duration-300"
+          >💬</span
+        >
+      </a>
     </div>
+
     <!-- SCRIPT -->
     <script>
-      // Menu Mobile Toggle
+      // 1. Premium Loading Screen
+      window.addEventListener("load", () => {
+        const preloader = document.getElementById("preloader");
+        preloader.style.opacity = "0";
+        setTimeout(() => {
+          preloader.style.visibility = "hidden";
+        }, 600);
+      });
+
+      // 2. Mouse Glow Effect
+      const glow = document.getElementById("mouseGlow");
+      // Only enable on desktop
+      if (window.innerWidth > 768) {
+        glow.style.display = "block";
+        document.addEventListener("mousemove", (e) => {
+          glow.style.left = e.clientX + "px";
+          glow.style.top = e.clientY + "px";
+        });
+      }
+
+      // 3. Better Mobile Menu Off-Canvas
       const menuBtn = document.getElementById("menuBtn");
       const mobileMenu = document.getElementById("mobileMenu");
+      const mobileOverlay = document.getElementById("mobileOverlay");
 
-      menuBtn.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
+      function toggleMenu() {
+        const isClosed = mobileMenu.classList.contains("translate-x-full");
+        if (isClosed) {
+          mobileMenu.classList.remove("translate-x-full");
+          mobileOverlay.classList.remove("opacity-0", "pointer-events-none");
+        } else {
+          mobileMenu.classList.add("translate-x-full");
+          mobileOverlay.classList.add("opacity-0", "pointer-events-none");
+        }
+      }
+
+      menuBtn.addEventListener("click", toggleMenu);
+      mobileOverlay.addEventListener("click", toggleMenu);
+
+      // Close menu on link click
+      const mobileLinks = mobileMenu.querySelectorAll("a");
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", toggleMenu);
       });
 
-      // Search Artikel
-      const searchInput = document.getElementById("searchInput");
-      searchInput.addEventListener("keyup", function () {
-        let filter = searchInput.value.toLowerCase();
-        let articles = document.querySelectorAll(".article");
+      // 4. Parallax Hero Effect
+      const heroBg = document.getElementById("heroBg");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY < window.innerHeight) {
+          heroBg.style.transform = `translateY(${window.scrollY * 0.4}px) scale(1.1)`;
+        }
+      });
 
-        articles.forEach(function (item) {
-          let text = item.innerText.toLowerCase();
-          if (text.includes(filter)) {
-            item.style.display = "";
-          } else {
-            item.style.display = "none";
+      // 5. Animated Statistics Counter
+      const counters = document.querySelectorAll(".counter");
+      const counterOptions = { root: null, threshold: 0.5 };
+
+      const counterObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = +entry.target.getAttribute("data-target");
+            let count = 0;
+            const duration = 2000; // 2 seconds
+            const increment = target / (duration / 16); // 60fps
+
+            const updateCount = () => {
+              count += increment;
+              if (count < target) {
+                entry.target.innerText = Math.ceil(count);
+                requestAnimationFrame(updateCount);
+              } else {
+                entry.target.innerText = target;
+              }
+            };
+            updateCount();
+            observer.unobserve(entry.target);
           }
         });
+      }, counterOptions);
+
+      counters.forEach((counter) => {
+        counterObserver.observe(counter);
       });
 
-      // Dark Mode Toggle
+      // 6. Search Artikel
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+        searchInput.addEventListener("keyup", function () {
+          let filter = searchInput.value.toLowerCase();
+          let articles = document.querySelectorAll(".article");
+          articles.forEach(function (item) {
+            let text = item.innerText.toLowerCase();
+            item.style.display = text.includes(filter) ? "" : "none";
+          });
+        });
+      }
+
+      // 7. Dark Mode Toggle
       const darkToggle = document.getElementById("darkToggle");
       const darkToggleMobile = document.getElementById("darkToggleMobile");
 
-      // Cek Status Dark Mode Saat Load
       if (localStorage.getItem("dark-mode") === "true") {
         document.documentElement.classList.add("dark");
       }
 
       function toggleTheme() {
         document.documentElement.classList.toggle("dark");
-        if (document.documentElement.classList.contains("dark")) {
-          localStorage.setItem("dark-mode", "true");
-        } else {
-          localStorage.setItem("dark-mode", "false");
-        }
+        localStorage.setItem(
+          "dark-mode",
+          document.documentElement.classList.contains("dark"),
+        );
       }
 
       darkToggle.addEventListener("click", toggleTheme);
       darkToggleMobile.addEventListener("click", toggleTheme);
-    </script>
 
-    <!-- Eksternal JS Biarkan Saja Sesuai Format Asli -->
-    <script src="./js/articles.js"></script>
-    <script src="./js/home-articles.js"></script>
-    <script>
-      const header = document.getElementById("header");
-
+      // 8. Header Scrolled Effect
+      const headerInner = document.getElementById("headerInner");
       window.addEventListener("scroll", () => {
         if (window.scrollY > 50) {
-          header.classList.add("py-2");
+          headerInner.classList.add("py-2", "shadow-orange-500/10");
+          headerInner.classList.remove("mt-5");
         } else {
-          header.classList.remove("py-2");
+          headerInner.classList.remove("py-2", "shadow-orange-500/10");
+          headerInner.classList.add("mt-5");
         }
       });
-    </script>
-    <script>
+
+      // 9. Reveal on Scroll
       const reveals = document.querySelectorAll(".reveal");
-
-      window.addEventListener("scroll", revealSections);
-
       function revealSections() {
         reveals.forEach((section) => {
           const windowHeight = window.innerHeight;
           const revealTop = section.getBoundingClientRect().top;
-
           if (revealTop < windowHeight - 100) {
             section.classList.add("active");
           }
         });
       }
+      window.addEventListener("scroll", revealSections);
+      revealSections(); // Trigger on load
 
-      revealSections();
-    </script>
-    <script>
+      // 10. Active Nav Links
       const sections = document.querySelectorAll("section");
       const navLinks = document.querySelectorAll(".nav-link");
 
       window.addEventListener("scroll", () => {
         let current = "";
-
         sections.forEach((section) => {
           const sectionTop = section.offsetTop;
-
-          if (scrollY >= sectionTop - 200) {
+          if (scrollY >= sectionTop - 300) {
             current = section.getAttribute("id");
           }
         });
 
         navLinks.forEach((link) => {
-          link.classList.remove("text-orange-400");
-
-          if (link.getAttribute("href") == "#" + current) {
-            link.classList.add("text-orange-400");
+          link.classList.remove("text-orange-500", "font-bold");
+          if (link.getAttribute("href") === "#" + current) {
+            link.classList.add("text-orange-500", "font-bold");
           }
         });
       });
     </script>
+
+    <!-- Eksternal JS Asli -->
+    <script src="./js/articles.js"></script>
+    <script src="./js/home-articles.js"></script>
   </body>
 </html>
