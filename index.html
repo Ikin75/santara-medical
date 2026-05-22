@@ -799,20 +799,24 @@
           </p>
         </div>
 
+        <!-- BAGIAN PENCARIAN YANG SUDAH DIPERBARUI -->
         <div class="mb-14">
           <div class="relative max-w-2xl mx-auto group">
             <input
               type="text"
               id="searchInput"
               placeholder="Cari artikel kesehatan..."
-              class="w-full py-5 px-7 rounded-2xl border border-gray-200 dark:border-white/10 dark:bg-[#151515] dark:text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/20 text-lg transition-all"
+              class="w-full py-5 pl-7 pr-16 rounded-2xl border border-gray-200 dark:border-white/10 dark:bg-[#151515] dark:text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/20 text-lg transition-all"
             />
-            <span
-              class="absolute right-6 top-1/2 -translate-y-1/2 text-2xl text-gray-400 group-focus-within:text-orange-500 transition"
-              >🔍</span
+            <button
+              id="searchBtn"
+              class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-orange-500/10 text-orange-500 rounded-xl hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-sm z-10 cursor-pointer text-xl"
             >
+              🔍
+            </button>
           </div>
         </div>
+        <!-- AKHIR BAGIAN PENCARIAN -->
 
         <div id="homeArticles" class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
           <!-- Article 1 -->
@@ -830,8 +834,9 @@
             </div>
             <span
               class="text-orange-500 text-xs font-bold uppercase tracking-wider bg-orange-50 dark:bg-orange-500/10 px-3 py-1 rounded-md"
-              >Jantung</span
             >
+              Jantung
+            </span>
             <h3
               class="text-xl font-bold mt-4 mb-3 dark:text-white group-hover:text-orange-500 transition"
             >
@@ -846,10 +851,12 @@
             <a
               href="#"
               class="text-gray-900 dark:text-white font-bold hover:text-orange-500 transition flex items-center gap-2"
-              >Baca Selengkapnya
-              <span class="group-hover:translate-x-1 transition">→</span></a
             >
+              Baca Selengkapnya
+              <span class="group-hover:translate-x-1 transition">→</span>
+            </a>
           </div>
+
           <!-- Article 2 -->
           <div
             class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100 dark:border-white/5 group"
@@ -865,8 +872,9 @@
             </div>
             <span
               class="text-orange-500 text-xs font-bold uppercase tracking-wider bg-orange-50 dark:bg-orange-500/10 px-3 py-1 rounded-md"
-              >Nutrisi</span
             >
+              Nutrisi
+            </span>
             <h3
               class="text-xl font-bold mt-4 mb-3 dark:text-white group-hover:text-orange-500 transition"
             >
@@ -881,10 +889,12 @@
             <a
               href="#"
               class="text-gray-900 dark:text-white font-bold hover:text-orange-500 transition flex items-center gap-2"
-              >Baca Selengkapnya
-              <span class="group-hover:translate-x-1 transition">→</span></a
             >
+              Baca Selengkapnya
+              <span class="group-hover:translate-x-1 transition">→</span>
+            </a>
           </div>
+
           <!-- Article 3 -->
           <div
             class="article bg-white dark:bg-[#1f1f1f] rounded-3xl p-6 shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100 dark:border-white/5 group"
@@ -900,8 +910,9 @@
             </div>
             <span
               class="text-orange-500 text-xs font-bold uppercase tracking-wider bg-orange-50 dark:bg-orange-500/10 px-3 py-1 rounded-md"
-              >Kebugaran</span
             >
+              Kebugaran
+            </span>
             <h3
               class="text-xl font-bold mt-4 mb-3 dark:text-white group-hover:text-orange-500 transition"
             >
@@ -916,9 +927,10 @@
             <a
               href="#"
               class="text-gray-900 dark:text-white font-bold hover:text-orange-500 transition flex items-center gap-2"
-              >Baca Selengkapnya
-              <span class="group-hover:translate-x-1 transition">→</span></a
             >
+              Baca Selengkapnya
+              <span class="group-hover:translate-x-1 transition">→</span>
+            </a>
           </div>
         </div>
 
@@ -926,8 +938,9 @@
           <a
             href="articles.html"
             class="inline-block bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-orange-500 dark:hover:bg-orange-500 hover:text-white transition-all px-8 py-4 rounded-2xl font-bold shadow-xl hover:-translate-y-1"
-            >Lihat Semua Artikel</a
           >
+            Lihat Semua Artikel
+          </a>
         </div>
       </div>
     </section>
@@ -963,7 +976,6 @@
         </a>
       </div>
     </section>
-
     <!-- CONTACT -->
     <section
       id="contact"
@@ -1276,15 +1288,33 @@
 
       // 6. Search Artikel
       const searchInput = document.getElementById("searchInput");
-      if (searchInput) {
-        searchInput.addEventListener("keyup", function () {
+      const searchBtn = document.getElementById("searchBtn");
+
+      if (searchInput && searchBtn) {
+        // Fungsi untuk menjalankan filter artikel
+        function performSearch() {
           let filter = searchInput.value.toLowerCase();
           let articles = document.querySelectorAll(".article");
+
           articles.forEach(function (item) {
             let text = item.innerText.toLowerCase();
             item.style.display = text.includes(filter) ? "" : "none";
           });
+        }
+
+        // 1. Berfungsi saat tombol 🔍 diklik
+        searchBtn.addEventListener("click", performSearch);
+
+        // 2. Berfungsi saat tombol "Enter" di keyboard ditekan
+        searchInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault(); // Mencegah reload halaman secara tak sengaja
+            performSearch();
+          }
         });
+
+        // 3. (Opsional) Tetap berfungsi secara langsung saat mengetik (Live Search)
+        searchInput.addEventListener("keyup", performSearch);
       }
 
       // 7. Dark Mode Toggle
