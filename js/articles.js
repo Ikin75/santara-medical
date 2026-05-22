@@ -19,7 +19,7 @@ function renderFeatured() {
   if (!featured) return;
 
   document.getElementById("featuredArticle").innerHTML = `
-    <div class="relative w-full h-[400px] lg:h-[450px] rounded-[32px] overflow-hidden shadow-2xl group border border-gray-100 dark:border-white/10">
+    <div class="relative w-full h-[300px] lg:h-[350px] rounded-[32px] overflow-hidden shadow-2xl group border border-gray-100 dark:border-white/10">
       <img
         src="${featured.image}"
         alt="${featured.title}"
