@@ -188,43 +188,6 @@
         );
       });
 
-      // 2. SEARCH ARTIKEL BERFUNGSI (Bisa Ketik, Enter, & Klik 🔍)
-      const searchInput = document.getElementById("searchInput");
-      const searchBtn = document.getElementById("searchBtn");
-
-      if (searchInput && searchBtn) {
-        function performSearch() {
-          let filter = searchInput.value.toLowerCase();
-
-          // Script ini mengasumsikan artikel yang di-render punya class "article"
-          // Pastikan di file JS kamu, kontainer artikel memiliki class="article"
-          let articles = document.querySelectorAll(".article");
-
-          articles.forEach(function (item) {
-            let text = item.innerText.toLowerCase();
-            if (text.includes(filter)) {
-              item.style.display = "";
-            } else {
-              item.style.display = "none";
-            }
-          });
-        }
-
-        // Jalankan pencarian saat tombol 🔍 diklik
-        searchBtn.addEventListener("click", performSearch);
-
-        // Jalankan pencarian saat tombol Enter ditekan
-        searchInput.addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            performSearch();
-          }
-        });
-
-        // Jalankan pencarian otomatis saat sedang mengetik (Live Search)
-        searchInput.addEventListener("keyup", performSearch);
-      }
-
       // 3. UI TOMBOL FILTER (Memberikan Efek Nyala Saat Diklik)
       const filterBtns = document.querySelectorAll(".filter-btn");
       filterBtns.forEach((btn) => {
