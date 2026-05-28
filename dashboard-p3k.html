@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard P3K</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100">
+    <header class="bg-black text-white py-5 shadow-xl">
+      <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <h1 class="text-3xl font-black">
+          <span class="text-orange-500">Santara</span>
+          Dashboard
+        </h1>
+
+        <a
+          href="p3k.html"
+          class="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-xl font-semibold"
+        >
+          Kembali
+        </a>
+      </div>
+    </header>
+
+    <section class="py-12 px-6">
+      <div class="max-w-7xl mx-auto">
+        <!-- TITLE -->
+
+        <div class="mb-12">
+          <h2 class="text-5xl font-black mb-4">Dashboard Statistik P3K</h2>
+
+          <p class="text-gray-500 text-lg">
+            Monitoring realtime inspeksi P3K perusahaan.
+          </p>
+        </div>
+
+        <!-- CARDS -->
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+          <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h3 class="text-gray-500 text-lg mb-3">Total Inspeksi</h3>
+
+            <p id="totalInspection" class="text-5xl font-black text-orange-500">
+              0
+            </p>
+          </div>
+
+          <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h3 class="text-gray-500 text-lg mb-3">Item Kurang</h3>
+
+            <p id="totalLess" class="text-5xl font-black text-yellow-500">0</p>
+          </div>
+
+          <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h3 class="text-gray-500 text-lg mb-3">Item Expired</h3>
+
+            <p id="totalExpired" class="text-5xl font-black text-red-500">0</p>
+          </div>
+        </div>
+
+        <!-- CHART -->
+
+        <div class="grid lg:grid-cols-2 gap-10">
+          <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h3 class="text-2xl font-bold mb-6">Status Pemeriksaan</h3>
+
+            <canvas id="statusChart"></canvas>
+          </div>
+
+          <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h3 class="text-2xl font-bold mb-6">Inspeksi per Lokasi</h3>
+
+            <canvas id="locationChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec";
+
+      async function loadDashboard() {
+        const response = await fetch(scriptURL);
+
+        const data = await response.json();
+
+        document.getElementById("totalInspection").innerText = data.length;
+
+        let less = 0;
+        let expired = 0;
+        let safe = 0;
+
+        const locationData = {};
+
+        data.forEach((item) => {
+          if (item.status === "Kurang") {
+            less++;
+          } else if (item.status === "Expired") {
+            expired++;
+          } else {
+            safe++;
+          }
+
+          if (locationData[item.location]) {
+            locationData[item.location]++;
+          } else {
+            locationData[item.location] = 1;
+          }
+        });
+
+        document.getElementById("totalLess").innerText = less;
+
+        document.getElementById("totalExpired").innerText = expired;
+
+        new Chart(document.getElementById("statusChart"), {
+          type: "doughnut",
+
+          data: {
+            labels: ["Aman", "Kurang", "Expired"],
+
+            datasets: [
+              {
+                data: [safe, less, expired],
+              },
+            ],
+          },
+        });
+
+        new Chart(document.getElementById("locationChart"), {
+          type: "bar",
+
+          data: {
+            labels: Object.keys(locationData),
+
+            datasets: [
+              {
+                label: "Jumlah",
+
+                data: Object.values(locationData),
+              },
+            ],
+          },
+        });
+      }
+
+      loadDashboard();
+    </script>
+  </body>
+</html>
