@@ -55,7 +55,10 @@
             Arahkan kamera ke QR Code kotak P3K.
           </p>
 
-          <div id="reader" class="rounded-3xl overflow-hidden"></div>
+          <div
+            id="reader"
+            class="w-full max-w-xl mx-auto overflow-hidden rounded-3xl shadow-2xl border-4 border-orange-500"
+          ></div>
         </div>
       </div>
     </section>
@@ -67,24 +70,39 @@
 
       const html5QrCode = new Html5Qrcode("reader");
 
-      Html5Qrcode.getCameras()
-        .then((devices) => {
-          if (devices && devices.length) {
-            html5QrCode.start(
-              { facingMode: "environment" },
+      Html5Qrcode.getCameras().then((devices) => {
+        if (devices && devices.length) {
+          html5QrCode.start(
+            {
+              facingMode: "environment",
+            },
+            {
+              fps: 10,
 
-              {
-                fps: 10,
-                qrbox: 250,
+              qrbox: {
+                width: 260,
+                height: 260,
               },
 
-              onScanSuccess,
-            );
-          }
-        })
-        .catch((err) => {
-          alert("Kamera tidak tersedia");
-        });
+              aspectRatio: 1.777,
+
+              experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true,
+              },
+            },
+
+            (decodedText) => {
+              document.getElementById("qrResult").value = decodedText;
+
+              html5QrCode.stop();
+            },
+
+            (errorMessage) => {
+              // ignore scan error
+            },
+          );
+        }
+      });
     </script>
   </body>
 </html>
