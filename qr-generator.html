@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>QR Generator P3K</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- HEADER -->
+
+    <header class="bg-black text-white py-5 shadow-xl">
+      <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <h1 class="text-3xl font-black">
+          <span class="text-orange-500"> Santara </span>
+
+          QR Generator
+        </h1>
+
+        <a
+          href="p3k.html"
+          class="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-xl font-semibold"
+        >
+          Kembali
+        </a>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+
+    <section class="py-16 px-6">
+      <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-3xl shadow-2xl p-10">
+          <h2 class="text-5xl font-black mb-4">Generate QR P3K</h2>
+
+          <p class="text-gray-500 text-lg mb-10">
+            Buat QR otomatis untuk setiap kotak P3K.
+          </p>
+
+          <!-- FORM -->
+
+          <div class="space-y-6">
+            <div>
+              <label class="font-bold mb-3 block"> Nomor Box </label>
+
+              <input
+                type="text"
+                id="box"
+                placeholder="P3K-001"
+                class="w-full border border-gray-200 rounded-2xl p-5"
+              />
+            </div>
+
+            <div>
+              <label class="font-bold mb-3 block"> Lokasi </label>
+
+              <input
+                type="text"
+                id="location"
+                placeholder="Gudang A"
+                class="w-full border border-gray-200 rounded-2xl p-5"
+              />
+            </div>
+
+            <button
+              onclick="generateQR()"
+              class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-5 rounded-2xl text-xl font-bold shadow-xl"
+            >
+              Generate QR
+            </button>
+          </div>
+
+          <!-- RESULT -->
+
+          <div class="mt-14 text-center">
+            <div
+              id="qrcode"
+              class="bg-white inline-block p-6 rounded-3xl shadow-xl"
+            ></div>
+
+            <a
+              id="downloadBtn"
+              class="hidden mt-8 inline-block bg-black hover:bg-gray-800 transition text-white px-8 py-4 rounded-2xl font-bold cursor-pointer"
+            >
+              Download QR
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function generateQR() {
+        const box = document.getElementById("box").value;
+
+        const location = document.getElementById("location").value;
+
+        if (!box || !location) {
+          alert("Isi semua data!");
+
+          return;
+        }
+
+        const qrContainer = document.getElementById("qrcode");
+
+        qrContainer.innerHTML = "";
+
+        const url = `https://santara-medical.vercel.app/p3k.html?box=${encodeURIComponent(box)}&location=${encodeURIComponent(location)}`;
+
+        new QRCode(qrContainer, {
+          text: url,
+
+          width: 300,
+
+          height: 300,
+        });
+
+        setTimeout(() => {
+          const img = qrContainer.querySelector("img");
+
+          const downloadBtn = document.getElementById("downloadBtn");
+
+          downloadBtn.href = img.src;
+
+          downloadBtn.download = `${box}.png`;
+
+          downloadBtn.classList.remove("hidden");
+        }, 500);
+      }
+    </script>
+  </body>
+</html>
