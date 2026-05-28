@@ -8,7 +8,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://unpkg.com/@zxing/browser"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
 
@@ -20,6 +20,15 @@
     <style>
       body {
         font-family: "Poppins", sans-serif;
+      }
+    </style>
+    <style>
+      #reader video {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: cover;
+        border-radius: 24px;
+        filter: contrast(1.05) sharpen(1);
       }
     </style>
   </head>
@@ -74,17 +83,25 @@
         if (devices && devices.length) {
           html5QrCode.start(
             {
-              facingMode: "environment",
+              facingMode: {
+                exact: "environment",
+              },
             },
+
             {
               fps: 10,
 
               qrbox: {
-                width: 260,
-                height: 260,
+                width: 280,
+                height: 280,
               },
 
               aspectRatio: 1.777,
+
+              videoConstraints: {
+                facingMode: "environment",
+                focusMode: "continuous",
+              },
 
               experimentalFeatures: {
                 useBarCodeDetectorIfSupported: true,
@@ -92,13 +109,15 @@
             },
 
             (decodedText) => {
+              console.log(decodedText);
+
               document.getElementById("qrResult").value = decodedText;
 
               html5QrCode.stop();
             },
 
             (errorMessage) => {
-              // ignore scan error
+              // ignore
             },
           );
         }
