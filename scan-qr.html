@@ -81,12 +81,28 @@
 
       Html5Qrcode.getCameras().then((devices) => {
         if (devices && devices.length) {
+          console.log(devices);
+
+          // PILIH KAMERA BELAKANG PALING BAGUS
+
+          let cameraId = devices[0].id;
+
+          devices.forEach((device) => {
+            const name = device.label.toLowerCase();
+
+            // hindari ultrawide/macro
+
+            if (
+              name.includes("back") ||
+              name.includes("rear") ||
+              name.includes("camera2")
+            ) {
+              cameraId = device.id;
+            }
+          });
+
           html5QrCode.start(
-            {
-              facingMode: {
-                exact: "environment",
-              },
-            },
+            cameraId,
 
             {
               fps: 10,
@@ -98,27 +114,14 @@
 
               aspectRatio: 1.777,
 
-              videoConstraints: {
-                facingMode: "environment",
-                focusMode: "continuous",
-              },
-
-              experimentalFeatures: {
-                useBarCodeDetectorIfSupported: true,
-              },
+              disableFlip: true,
             },
 
             (decodedText) => {
-              console.log(decodedText);
-
               document.getElementById("qrResult").value = decodedText;
-
-              html5QrCode.stop();
             },
 
-            (errorMessage) => {
-              // ignore
-            },
+            (errorMessage) => {},
           );
         }
       });
