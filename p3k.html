@@ -346,16 +346,13 @@
           }
 
           function updateCompare(index, actual) {
-            // SIMULASI DATA BULAN LALU
-
-            const lastMonth = item.standard;
+            // AMBIL DATA BULAN LALU DARI HISTORY
+            const lastMonth = parseInt(lastInspection[item.name]) || 0;
 
             // TAMPILKAN
-
             document.getElementById(`last-${index}`).innerText = lastMonth;
 
-            // SELISIH
-
+            // HITUNG SELISIH
             const diff = actual - lastMonth;
 
             const diffEl = document.getElementById(`diff-${index}`);
@@ -365,7 +362,6 @@
             diffEl.className = "font-bold";
 
             // WARNA
-
             if (diff < 0) {
               diffEl.classList.add("text-red-500");
             } else if (diff > 0) {
