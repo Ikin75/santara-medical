@@ -68,6 +68,20 @@
             id="reader"
             class="w-full max-w-xl mx-auto overflow-hidden rounded-3xl shadow-2xl border-4 border-orange-500"
           ></div>
+
+          <!-- TAMBAHKAN KODE INI DI BAWAH READER -->
+          <div class="mt-8">
+            <p class="text-sm font-bold text-gray-500 mb-3">
+              Atau upload/foto QR secara manual:
+            </p>
+            <input
+              type="file"
+              id="qr-upload"
+              accept="image/*"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 cursor-pointer"
+            />
+          </div>
+
           <div id="qrResult"></div>
         </div>
       </div>
@@ -129,6 +143,52 @@
               "Gagal membuka kamera belakang. Pastikan Anda mengizinkan akses kamera di browser.",
             );
           });
+
+        // TAMBAHKAN FITUR SCAN DARI FILE / FOTO
+        const fileInput = document.getElementById("qr-upload");
+
+        fileInput.addEventListener("change", (e) => {
+          if (e.target.files.length === 0) {
+            return;
+          }
+
+          const imageFile = e.target.files[0];
+
+          // Memindai gambar statis
+          html5QrCode
+            .scanFile(imageFile, true)
+            .then((decodedText) => {
+              console.log("HASIL DARI FOTO:", decodedText);
+
+              if (resultEl) {
+                resultEl.innerHTML = `
+                  <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all border border-green-300 shadow-md">
+                    ✅ QR Foto Terdeteksi: <br> ${decodedText}
+                  </div>
+                `;
+              }
+
+              // Hentikan live kamera jika foto berhasil discan
+              html5QrCode.stop().catch((err) => console.log(err));
+
+              setTimeout(() => {
+                if (
+                  decodedText.startsWith("http://") ||
+                  decodedText.startsWith("https://")
+                ) {
+                  window.location.href = decodedText;
+                }
+              }, 500);
+            })
+            .catch((err) => {
+              console.log("Gagal membaca QR dari foto:", err);
+              alert(
+                "QR Code tidak ditemukan pada gambar tersebut. Pastikan gambar jelas dan tidak buram.",
+              );
+              // Reset input file agar bisa mencoba foto lain
+              fileInput.value = "";
+            });
+        });
       });
     </script>
   </body>
