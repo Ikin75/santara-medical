@@ -684,6 +684,18 @@
 
       const box = params.get("box");
 
+      if (boxParam) {
+        fetch(
+          "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec?box=" +
+            boxParam,
+        )
+          .then((res) => res.json())
+
+          .then((history) => {
+            console.log(history);
+          });
+      }
+
       const locationName = params.get("location");
 
       if (box) {
