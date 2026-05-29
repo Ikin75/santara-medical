@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Warning P3K</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body class="bg-red-50">
+    <header class="bg-black text-white py-5 shadow-xl">
+      <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <h1 class="text-3xl font-black">
+          <span class="text-orange-500"> Santara </span>
+
+          Warning P3K
+        </h1>
+
+        <a
+          href="dashboard-p3k.html"
+          class="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-xl font-semibold"
+        >
+          Dashboard
+        </a>
+      </div>
+    </header>
+
+    <section class="py-12 px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-10">
+          <h2 class="text-5xl font-black text-red-600 mb-4">
+            🚨 Box Bermasalah
+          </h2>
+
+          <p class="text-gray-600 text-lg">Daftar item kurang dan expired.</p>
+        </div>
+
+        <div id="warningContainer" class="grid md:grid-cols-2 gap-8"></div>
+      </div>
+    </section>
+
+    <script>
+      if (localStorage.getItem("isLogin") != "true") {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <script>
+      fetch(
+        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec",
+      )
+        .then((res) => res.json())
+
+        .then((data) => {
+          console.log(data);
+
+          showWarning(data);
+        });
+
+      function showWarning(data) {
+        const container = document.getElementById("warningContainer");
+
+        const filtered = data.filter(
+          (row) => row.status == "Kurang" || row.status == "Expired",
+        );
+
+        if (filtered.length == 0) {
+          container.innerHTML = `
+
+<div class="
+bg-white rounded-3xl p-10
+shadow-2xl text-center
+col-span-2
+">
+
+<h2 class="text-4xl font-black text-green-500">
+
+✅ Semua Box Aman
+
+</h2>
+
+<p class="text-gray-500 mt-4 text-lg">
+
+Tidak ada item kurang atau expired.
+
+</p>
+
+</div>
+
+`;
+
+          return;
+        }
+
+        filtered.reverse().forEach((row) => {
+          container.innerHTML += `
+
+<div class="
+bg-white rounded-3xl
+shadow-2xl p-8
+border-l-8
+
+${row.status == "Expired" ? "border-red-500" : "border-yellow-500"}
+">
+
+<div class="
+flex justify-between items-start
+mb-6
+">
+
+<div>
+
+<h3 class="text-3xl font-black">
+
+${row.box}
+
+</h3>
+
+<p class="text-gray-500 mt-2">
+
+${row.location}
+
+</p>
+
+</div>
+
+<span class="
+px-5 py-3 rounded-2xl
+text-white font-bold
+
+${row.status == "Expired" ? "bg-red-500" : "bg-yellow-500"}
+">
+
+${row.status}
+
+</span>
+
+</div>
+
+<div class="space-y-3 text-lg">
+
+<p>
+
+<strong>Item:</strong>
+${row.item}
+
+</p>
+
+<p>
+
+<strong>Aktual:</strong>
+${row.actual}
+
+</p>
+
+<p>
+
+<strong>Petugas:</strong>
+${row.officer}
+
+</p>
+
+<p>
+
+<strong>Tanggal:</strong>
+
+${new Date(row.date).toLocaleDateString("id-ID")}
+
+</p>
+
+</div>
+
+${
+  row.photo
+    ? `
+
+<a
+href="${row.photo}"
+target="_blank"
+class="
+mt-6 inline-block
+bg-black text-white
+px-5 py-3 rounded-2xl
+font-bold
+"
+>
+
+📷 Lihat Foto
+
+</a>
+
+`
+    : ""
+}
+
+</div>
+
+`;
+        });
+      }
+    </script>
+  </body>
+</html>

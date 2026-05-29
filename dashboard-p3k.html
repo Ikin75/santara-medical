@@ -28,8 +28,9 @@
     <header class="bg-black text-white py-5 shadow-xl">
       <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <h1 class="text-3xl font-black">
-          <span class="text-orange-500">Santara</span>
-          Dashboard
+          <span class="text-orange-500"> Santara </span>
+
+          Dashboard P3K
         </h1>
 
         <a
@@ -45,125 +46,173 @@
       <div class="max-w-7xl mx-auto">
         <!-- TITLE -->
 
-        <div class="mb-12">
-          <h2 class="text-5xl font-black mb-4">Dashboard Statistik P3K</h2>
+        <div class="mb-10">
+          <h2 class="text-5xl font-black mb-4">📊 Dashboard Analytics</h2>
 
           <p class="text-gray-500 text-lg">
-            Monitoring realtime inspeksi P3K perusahaan.
+            Monitoring inspeksi kotak P3K realtime.
           </p>
         </div>
 
-        <!-- CARDS -->
+        <!-- SUMMARY -->
 
-        <div class="grid md:grid-cols-3 gap-8 mb-12">
-          <div class="bg-white rounded-3xl shadow-xl p-8">
-            <h3 class="text-gray-500 text-lg mb-3">Total Inspeksi</h3>
+        <div class="grid md:grid-cols-4 gap-6 mb-10">
+          <div class="bg-white rounded-3xl p-8 shadow-xl">
+            <h3 class="text-gray-500 font-semibold">Total Pemeriksaan</h3>
 
-            <p id="totalInspection" class="text-5xl font-black text-orange-500">
+            <p id="totalInspection" class="text-5xl font-black mt-3">0</p>
+          </div>
+
+          <div class="bg-white rounded-3xl p-8 shadow-xl">
+            <h3 class="text-gray-500 font-semibold">Total Box</h3>
+
+            <p id="totalBox" class="text-5xl font-black mt-3">0</p>
+          </div>
+
+          <div class="bg-white rounded-3xl p-8 shadow-xl">
+            <h3 class="text-gray-500 font-semibold">Item Kurang</h3>
+
+            <p id="totalLess" class="text-5xl font-black text-yellow-500 mt-3">
               0
             </p>
           </div>
 
-          <div class="bg-white rounded-3xl shadow-xl p-8">
-            <h3 class="text-gray-500 text-lg mb-3">Item Kurang</h3>
+          <div class="bg-white rounded-3xl p-8 shadow-xl">
+            <h3 class="text-gray-500 font-semibold">Item Expired</h3>
 
-            <p id="totalLess" class="text-5xl font-black text-yellow-500">0</p>
-          </div>
-
-          <div class="bg-white rounded-3xl shadow-xl p-8">
-            <h3 class="text-gray-500 text-lg mb-3">Item Expired</h3>
-
-            <p id="totalExpired" class="text-5xl font-black text-red-500">0</p>
+            <p id="totalExpired" class="text-5xl font-black text-red-500 mt-3">
+              0
+            </p>
           </div>
         </div>
 
         <!-- CHART -->
 
-        <div class="grid lg:grid-cols-2 gap-10">
-          <div class="bg-white rounded-3xl shadow-xl p-8">
-            <h3 class="text-2xl font-bold mb-6">Status Pemeriksaan</h3>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-white rounded-3xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-black mb-6">Status Pemeriksaan</h3>
 
             <canvas id="statusChart"></canvas>
           </div>
 
-          <div class="bg-white rounded-3xl shadow-xl p-8">
-            <h3 class="text-2xl font-bold mb-6">Inspeksi per Lokasi</h3>
+          <div class="bg-white rounded-3xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-black mb-6">Box Paling Bermasalah</h3>
 
-            <canvas id="locationChart"></canvas>
+            <div id="problemBox" class="space-y-4"></div>
           </div>
         </div>
       </div>
     </section>
 
     <script>
-      const scriptURL =
-        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec";
+      if (localStorage.getItem("isLogin") != "true") {
+        window.location.href = "login.html";
+      }
+    </script>
+    <script>
+      fetch(
+        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec",
+      )
+        .then((res) => res.json())
 
-      async function loadDashboard() {
-        const response = await fetch(scriptURL);
+        .then((data) => {
+          console.log(data);
 
-        const data = await response.json();
+          analyzeData(data);
+        });
 
+      function analyzeData(data) {
+        // TOTAL
         document.getElementById("totalInspection").innerText = data.length;
 
-        let less = 0;
+        // UNIQUE BOX
+        const uniqueBox = [...new Set(data.map((row) => row.box))];
+
+        document.getElementById("totalBox").innerText = uniqueBox.length;
+
+        // STATUS COUNT
+        let aman = 0;
+        let kurang = 0;
         let expired = 0;
-        let safe = 0;
 
-        const locationData = {};
+        // PROBLEM BOX
+        let boxProblem = {};
 
-        data.forEach((item) => {
-          if (item.status === "Kurang") {
-            less++;
-          } else if (item.status === "Expired") {
-            expired++;
-          } else {
-            safe++;
+        data.forEach((row) => {
+          if (row.status == "Aman") {
+            aman++;
           }
 
-          if (locationData[item.location]) {
-            locationData[item.location]++;
-          } else {
-            locationData[item.location] = 1;
+          if (row.status == "Kurang") {
+            kurang++;
+
+            boxProblem[row.box] = (boxProblem[row.box] || 0) + 1;
+          }
+
+          if (row.status == "Expired") {
+            expired++;
+
+            boxProblem[row.box] = (boxProblem[row.box] || 0) + 1;
           }
         });
 
-        document.getElementById("totalLess").innerText = less;
+        document.getElementById("totalLess").innerText = kurang;
 
         document.getElementById("totalExpired").innerText = expired;
 
-        new Chart(document.getElementById("statusChart"), {
-          type: "doughnut",
+        // CHART
+        new Chart(
+          document.getElementById("statusChart"),
 
-          data: {
-            labels: ["Aman", "Kurang", "Expired"],
+          {
+            type: "doughnut",
 
-            datasets: [
-              {
-                data: [safe, less, expired],
-              },
-            ],
+            data: {
+              labels: ["Aman", "Kurang", "Expired"],
+
+              datasets: [
+                {
+                  data: [aman, kurang, expired],
+                },
+              ],
+            },
           },
-        });
+        );
 
-        new Chart(document.getElementById("locationChart"), {
-          type: "bar",
+        // SORT BOX PROBLEM
+        const sortedBox = Object.entries(boxProblem)
 
-          data: {
-            labels: Object.keys(locationData),
+          .sort((a, b) => b[1] - a[1])
 
-            datasets: [
-              {
-                label: "Jumlah",
+          .slice(0, 5);
 
-                data: Object.values(locationData),
-              },
-            ],
-          },
+        const problemBox = document.getElementById("problemBox");
+
+        sortedBox.forEach((box) => {
+          problemBox.innerHTML += `
+
+<div class="
+bg-red-50 border border-red-200
+rounded-2xl p-5
+">
+
+<h3 class="font-black text-xl text-red-600">
+
+${box[0]}
+
+</h3>
+
+<p class="text-gray-600 mt-2">
+
+${box[1]} masalah ditemukan
+
+</p>
+
+</div>
+
+`;
         });
       }
-
-      loadDashboard();
     </script>
   </body>
 </html>
