@@ -74,96 +74,59 @@
     </section>
 
     <script>
-      // Pastikan DOM sudah siap sebelum memanggil elemen
       document.addEventListener("DOMContentLoaded", () => {
         const html5QrCode = new Html5Qrcode("reader");
+        const resultEl = document.getElementById("qrResult");
 
-        // Meminta izin akses kamera
-        Html5Qrcode.getCameras()
-          .then((devices) => {
-            if (devices && devices.length) {
-              console.log("Kamera ditemukan:", devices);
+        // Konfigurasi Scanner
+        const config = {
+          fps: 10,
+          qrbox: { width: 250, height: 250 }, // Kita kembalikan kotak fokusnya agar AI lebih terarah
+          disableFlip: false,
+          // FOKUS HANYA PADA QR CODE (Bikin performa jauh lebih cepat)
+          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+        };
 
-              let cameraId = devices[0].id;
+        // LANGSUNG TEMBAK KAMERA BELAKANG (Tanpa perlu cari nama kamera)
+        html5QrCode
+          .start(
+            { facingMode: "environment" }, // Paksa gunakan kamera belakang
+            config,
 
-              // Pilih kamera belakang terbaik
-              devices.forEach((device) => {
-                const name = device.label.toLowerCase();
-                if (
-                  name.includes("back") ||
-                  name.includes("rear") ||
-                  name.includes("environment") || // tambahan kata kunci untuk mobile
-                  name.includes("camera2")
-                ) {
-                  cameraId = device.id;
-                }
+            // JIKA BERHASIL SCAN
+            (decodedText) => {
+              console.log("HASIL:", decodedText);
+
+              if (resultEl) {
+                resultEl.innerHTML = `
+                <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all border border-green-300 shadow-md">
+                  ✅ QR Terdeteksi: <br> ${decodedText}
+                </div>
+              `;
+              }
+
+              // Hentikan scanner setelah berhasil
+              html5QrCode.stop().then(() => {
+                setTimeout(() => {
+                  // Cek apakah hasil scan berupa link
+                  if (
+                    decodedText.startsWith("http://") ||
+                    decodedText.startsWith("https://")
+                  ) {
+                    window.location.href = decodedText;
+                  }
+                }, 500);
               });
+            },
 
-              // Mulai kamera
-              // Mulai kamera
-              html5QrCode
-                .start(
-                  cameraId,
-                  {
-                    fps: 10,
-                    // Hapus atau jadikan komentar bagian qrbox di bawah ini
-                    // qrbox: { width: 250, height: 250 },
-
-                    // Opsional: Paksa menggunakan resolusi HD untuk membaca QR padat
-                    videoConstraints: {
-                      width: { min: 640, ideal: 1280 },
-                      height: { min: 480, ideal: 720 },
-                      advanced: [{ focusMode: "continuous" }],
-                    },
-                    disableFlip: false,
-                  },
-                  // SUCCESS CALL
-                  (decodedText) => {
-                    // ... (kode sukses kamu di sini tetap sama) ...
-                    console.log("HASIL:", decodedText);
-
-                    const resultEl = document.getElementById("qrResult");
-                    if (resultEl) {
-                      resultEl.innerHTML = `
-                      <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all border border-green-300">
-                        ✅ QR Terdeteksi: <br> ${decodedText}
-                      </div>
-                    `;
-                    }
-
-                    // Hentikan scanner setelah berhasil
-                    html5QrCode.stop().then(() => {
-                      setTimeout(() => {
-                        if (
-                          decodedText.startsWith("http://") ||
-                          decodedText.startsWith("https://")
-                        ) {
-                          window.location.href = decodedText;
-                        }
-                      }, 500);
-                    });
-                  },
-                  // ERROR CALL (Abaikan frame yang gagal terbaca)
-                  (errorMessage) => {
-                    // Tidak perlu di-log agar console tidak penuh
-                  },
-                )
-                .catch((err) => {
-                  // TANGKAP ERROR START KAMERA
-                  console.error("Gagal memulai kamera:", err);
-                  alert(
-                    "Gagal memuat kamera. Pastikan rasio kamera didukung atau coba muat ulang halaman.",
-                  );
-                });
-            } else {
-              alert("Tidak ada kamera yang terdeteksi di perangkat ini.");
-            }
-          })
+            // JIKA ERROR FRAME (Abaikan saja agar tidak penuh log-nya)
+            (errorMessage) => {},
+          )
           .catch((err) => {
-            // TANGKAP ERROR IZIN DITOLAK ATAU BUKAN HTTPS/LOCALHOST
-            console.error("Error mendapatkan akses kamera:", err);
+            // TANGKAP ERROR JIKA KAMERA DITOLAK ATAU RUSAK
+            console.error("Gagal memulai kamera:", err);
             alert(
-              "Akses kamera ditolak! Pastikan Anda mengizinkan akses kamera dan membuka halaman ini melalui Live Server (localhost) atau HTTPS.",
+              "Gagal membuka kamera belakang. Pastikan Anda mengizinkan akses kamera di browser.",
             );
           });
       });
