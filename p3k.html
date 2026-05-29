@@ -268,7 +268,8 @@
       const petugasLogin = localStorage.getItem("santara_petugas");
       if (!petugasLogin) {
         alert("Akses Ditolak! Anda harus login terlebih dahulu.");
-        window.location.href = "login-p3k.html";
+        // Bawa paramater URL saat dilempar ke halaman login
+        window.location.href = "login-p3k.html" + window.location.search;
       }
 
       function logoutPetugas() {
@@ -276,16 +277,6 @@
         window.location.href = "login-p3k.html";
       }
 
-      // Mencegah form tersubmit otomatis saat pencet tombol Enter
-      document
-        .getElementById("p3kForm")
-        .addEventListener("keydown", function (e) {
-          if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
-            e.preventDefault();
-          }
-        });
-
-      // 2. DATA ITEM P3K
       // 2. DATA ITEM P3K (Standar Lengkap)
       const items = [
         { name: "Kassa steril terbungkus", standard: 20 },

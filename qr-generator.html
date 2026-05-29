@@ -144,7 +144,7 @@
         const qrContainer = document.getElementById("qrcode");
         qrContainer.innerHTML = "";
 
-        const url = `https://santara-medical.vercel.app/p3k.html?company=${encodeURIComponent(companyInput.value)}&location=${encodeURIComponent(location)}&box=${encodeURIComponent(box)}`;
+        const url = `https://santara-medical.vercel.app/portal-p3k.html?company=${encodeURIComponent(companyInput.value)}&location=${encodeURIComponent(location)}&box=${encodeURIComponent(box)}`;
 
         new QRCode(qrContainer, {
           text: url,

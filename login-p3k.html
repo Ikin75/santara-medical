@@ -85,8 +85,8 @@
           if (pin === PIN_BENAR) {
             // Simpan nama petugas ke memori browser
             localStorage.setItem("santara_petugas", name);
-            // Arahkan ke halaman form P3K
-            window.location.href = "p3k.html";
+            // Arahkan ke halaman form P3K dengan membawa parameter URL dari portal
+            window.location.href = "p3k.html" + window.location.search;
           } else {
             // Munculkan error
             document.getElementById("errorMsg").classList.remove("hidden");
