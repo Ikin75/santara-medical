@@ -2,76 +2,81 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Login Admin</title>
-
+    <title>Login Admin - Santara P3K</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-
     <style>
       body {
         font-family: "Poppins", sans-serif;
       }
     </style>
   </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen px-6">
+    <div
+      class="bg-white rounded-[32px] shadow-2xl p-10 w-full max-w-md relative overflow-hidden"
+    >
+      <div
+        class="absolute -top-16 -right-16 w-40 h-40 bg-orange-500/20 blur-3xl rounded-full"
+      ></div>
 
-  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-md">
-      <h1 class="text-5xl font-black mb-3">
-        <span class="text-orange-500"> Santara </span>
+      <div class="relative z-10 text-center mb-10">
+        <h1 class="text-4xl font-black mb-2">
+          <span class="text-orange-500">Santara</span> Admin
+        </h1>
+        <p class="text-gray-500">Akses khusus Dashboard Analitik P3K</p>
+      </div>
 
-        Login
-      </h1>
-
-      <p class="text-gray-500 mb-10">Login admin dashboard P3K</p>
-
-      <div class="space-y-6">
+      <form id="loginAdminForm" class="space-y-6 relative z-10">
         <input
           type="text"
           id="username"
           placeholder="Username"
-          class="w-full border border-gray-200 rounded-2xl p-4"
+          required
+          class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-2 focus:ring-orange-500 focus:outline-none transition"
         />
-
         <input
           type="password"
           id="password"
           placeholder="Password"
-          class="w-full border border-gray-200 rounded-2xl p-4"
+          required
+          class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-2 focus:ring-orange-500 focus:outline-none transition"
         />
 
-        <button
-          onclick="login()"
-          class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-2xl font-bold text-xl"
+        <p
+          id="errorMsg"
+          class="text-red-500 text-sm font-semibold hidden text-center"
         >
-          Login
+          ❌ Username atau Password salah!
+        </p>
+
+        <button
+          type="submit"
+          class="w-full bg-black hover:bg-orange-500 transition-colors text-white py-4 rounded-2xl font-bold text-lg shadow-lg"
+        >
+          Login Dashboard
         </button>
-      </div>
+      </form>
     </div>
 
     <script>
-      function login() {
-        const username = document.getElementById("username").value;
+      document
+        .getElementById("loginAdminForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const user = document.getElementById("username").value;
+          const pass = document.getElementById("password").value;
 
-        const password = document.getElementById("password").value;
-
-        // LOGIN SIMPLE
-        if (username == "admin" && password == "123456") {
-          localStorage.setItem("isLogin", "true");
-
-          window.location.href = "dashboard-p3k.html";
-        } else {
-          alert("Username atau password salah!");
-        }
-      }
+          if (user === "admin" && pass === "123456") {
+            localStorage.setItem("isLogin", "true");
+            window.location.href = "dashboard-p3k.html";
+          } else {
+            document.getElementById("errorMsg").classList.remove("hidden");
+          }
+        });
     </script>
   </body>
 </html>

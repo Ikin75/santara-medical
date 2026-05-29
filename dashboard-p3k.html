@@ -3,215 +3,227 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Dashboard P3K</title>
-
+    <title>Dashboard P3K - Santara</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-
     <style>
       body {
         font-family: "Poppins", sans-serif;
       }
     </style>
   </head>
+  <body class="bg-gray-50">
+    <script>
+      if (localStorage.getItem("isLogin") !== "true") {
+        window.location.href = "login.html";
+      }
+      function logoutAdmin() {
+        localStorage.removeItem("isLogin");
+        window.location.href = "login.html";
+      }
+    </script>
 
-  <body class="bg-gray-100">
     <header class="bg-black text-white py-5 shadow-xl">
       <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <h1 class="text-3xl font-black">
-          <span class="text-orange-500"> Santara </span>
-
-          Dashboard P3K
+          <span class="text-orange-500">Santara</span> Dashboard
         </h1>
-
-        <a
-          href="p3k.html"
-          class="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-xl font-semibold"
-        >
-          Kembali
-        </a>
+        <div class="flex gap-3">
+          <a
+            href="index.html"
+            class="bg-gray-800 hover:bg-gray-700 transition px-5 py-3 rounded-xl font-semibold hidden sm:block"
+            >Home Website</a
+          >
+          <button
+            onclick="logoutAdmin()"
+            class="bg-red-500 hover:bg-red-600 px-5 py-3 rounded-xl font-semibold transition"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </header>
 
     <section class="py-12 px-6">
       <div class="max-w-7xl mx-auto">
-        <!-- TITLE -->
-
-        <div class="mb-10">
-          <h2 class="text-5xl font-black mb-4">📊 Dashboard Analytics</h2>
-
+        <div class="mb-10 text-center md:text-left">
+          <h2 class="text-4xl md:text-5xl font-black mb-4">
+            📊 Dashboard Analytics
+          </h2>
           <p class="text-gray-500 text-lg">
-            Monitoring inspeksi kotak P3K realtime.
+            Monitoring inspeksi kotak P3K secara realtime.
           </p>
         </div>
 
-        <!-- SUMMARY -->
-
-        <div class="grid md:grid-cols-4 gap-6 mb-10">
-          <div class="bg-white rounded-3xl p-8 shadow-xl">
-            <h3 class="text-gray-500 font-semibold">Total Pemeriksaan</h3>
-
-            <p id="totalInspection" class="text-5xl font-black mt-3">0</p>
-          </div>
-
-          <div class="bg-white rounded-3xl p-8 shadow-xl">
-            <h3 class="text-gray-500 font-semibold">Total Box</h3>
-
-            <p id="totalBox" class="text-5xl font-black mt-3">0</p>
-          </div>
-
-          <div class="bg-white rounded-3xl p-8 shadow-xl">
-            <h3 class="text-gray-500 font-semibold">Item Kurang</h3>
-
-            <p id="totalLess" class="text-5xl font-black text-yellow-500 mt-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
+          <div
+            class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-gray-100"
+          >
+            <h3 class="text-gray-500 font-semibold text-sm md:text-base">
+              Total Item Diperiksa
+            </h3>
+            <p
+              id="totalInspection"
+              class="text-4xl md:text-5xl font-black mt-3 text-gray-800"
+            >
               0
             </p>
           </div>
-
-          <div class="bg-white rounded-3xl p-8 shadow-xl">
-            <h3 class="text-gray-500 font-semibold">Item Expired</h3>
-
-            <p id="totalExpired" class="text-5xl font-black text-red-500 mt-3">
+          <div
+            class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-gray-100"
+          >
+            <h3 class="text-gray-500 font-semibold text-sm md:text-base">
+              Kotak Terekam
+            </h3>
+            <p
+              id="totalBox"
+              class="text-4xl md:text-5xl font-black mt-3 text-gray-800"
+            >
+              0
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-gray-100"
+          >
+            <h3 class="text-gray-500 font-semibold text-sm md:text-base">
+              Item Kurang
+            </h3>
+            <p
+              id="totalLess"
+              class="text-4xl md:text-5xl font-black text-yellow-500 mt-3"
+            >
+              0
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-gray-100"
+          >
+            <h3 class="text-gray-500 font-semibold text-sm md:text-base">
+              Item Expired
+            </h3>
+            <p
+              id="totalExpired"
+              class="text-4xl md:text-5xl font-black text-red-500 mt-3"
+            >
               0
             </p>
           </div>
         </div>
 
-        <!-- CHART -->
-
         <div class="grid md:grid-cols-2 gap-8">
-          <div class="bg-white rounded-3xl p-8 shadow-2xl">
-            <h3 class="text-2xl font-black mb-6">Status Pemeriksaan</h3>
-
-            <canvas id="statusChart"></canvas>
+          <div
+            class="bg-white rounded-3xl p-8 shadow-2xl border border-gray-100"
+          >
+            <h3 class="text-2xl font-black mb-6 text-center md:text-left">
+              Status Item Keseluruhan
+            </h3>
+            <div class="w-full max-w-sm mx-auto">
+              <canvas id="statusChart"></canvas>
+            </div>
           </div>
-
-          <div class="bg-white rounded-3xl p-8 shadow-2xl">
-            <h3 class="text-2xl font-black mb-6">Box Paling Bermasalah</h3>
-
-            <div id="problemBox" class="space-y-4"></div>
+          <div
+            class="bg-white rounded-3xl p-8 shadow-2xl border border-gray-100"
+          >
+            <h3 class="text-2xl font-black mb-6 flex items-center gap-2">
+              🚨 Kotak Paling Bermasalah
+            </h3>
+            <div
+              id="problemBox"
+              class="space-y-4 max-h-[300px] overflow-y-auto pr-2"
+            >
+              <p class="text-gray-400 text-center italic py-4" id="loadingText">
+                Memuat data dari server...
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <script>
-      if (localStorage.getItem("isLogin") != "true") {
-        window.location.href = "login.html";
-      }
-    </script>
-    <script>
-      fetch(
-        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec",
-      )
+      // Wajib disamakan dengan URL Google Script App milikmu
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec";
+
+      fetch(SCRIPT_URL)
         .then((res) => res.json())
-
         .then((data) => {
-          console.log(data);
-
+          document.getElementById("loadingText").style.display = "none";
           analyzeData(data);
+        })
+        .catch((err) => {
+          document.getElementById("loadingText").innerText =
+            "Gagal memuat data. Pastikan Google Script sudah di-deploy ulang.";
+          console.error(err);
         });
 
       function analyzeData(data) {
-        // TOTAL
-        document.getElementById("totalInspection").innerText = data.length;
+        // Abaikan data yang kosong
+        const validData = data.filter((row) => row.box && row.status);
 
-        // UNIQUE BOX
-        const uniqueBox = [...new Set(data.map((row) => row.box))];
-
+        document.getElementById("totalInspection").innerText = validData.length;
+        const uniqueBox = [...new Set(validData.map((row) => row.box))];
         document.getElementById("totalBox").innerText = uniqueBox.length;
 
-        // STATUS COUNT
-        let aman = 0;
-        let kurang = 0;
-        let expired = 0;
-
-        // PROBLEM BOX
+        let aman = 0,
+          kurang = 0,
+          expired = 0;
         let boxProblem = {};
 
-        data.forEach((row) => {
-          if (row.status == "Aman") {
-            aman++;
-          }
-
-          if (row.status == "Kurang") {
+        validData.forEach((row) => {
+          if (row.status === "Aman") aman++;
+          if (row.status === "Kurang") {
             kurang++;
-
             boxProblem[row.box] = (boxProblem[row.box] || 0) + 1;
           }
-
-          if (row.status == "Expired") {
+          if (row.status === "Expired") {
             expired++;
-
             boxProblem[row.box] = (boxProblem[row.box] || 0) + 1;
           }
         });
 
         document.getElementById("totalLess").innerText = kurang;
-
         document.getElementById("totalExpired").innerText = expired;
 
-        // CHART
-        new Chart(
-          document.getElementById("statusChart"),
-
-          {
-            type: "doughnut",
-
-            data: {
-              labels: ["Aman", "Kurang", "Expired"],
-
-              datasets: [
-                {
-                  data: [aman, kurang, expired],
-                },
-              ],
-            },
+        // RENDER CHART DENGAN WARNA BRAND SANTARA
+        new Chart(document.getElementById("statusChart"), {
+          type: "doughnut",
+          data: {
+            labels: ["Aman", "Kurang", "Expired"],
+            datasets: [
+              {
+                data: [aman, kurang, expired],
+                backgroundColor: ["#22c55e", "#eab308", "#ef4444"], // Hijau, Kuning, Merah
+                borderWidth: 0,
+                hoverOffset: 4,
+              },
+            ],
           },
-        );
-
-        // SORT BOX PROBLEM
-        const sortedBox = Object.entries(boxProblem)
-
-          .sort((a, b) => b[1] - a[1])
-
-          .slice(0, 5);
-
-        const problemBox = document.getElementById("problemBox");
-
-        sortedBox.forEach((box) => {
-          problemBox.innerHTML += `
-
-<div class="
-bg-red-50 border border-red-200
-rounded-2xl p-5
-">
-
-<h3 class="font-black text-xl text-red-600">
-
-${box[0]}
-
-</h3>
-
-<p class="text-gray-600 mt-2">
-
-${box[1]} masalah ditemukan
-
-</p>
-
-</div>
-
-`;
+          options: { plugins: { legend: { position: "bottom" } } },
         });
+
+        // RENDER PROBLEM BOX
+        const sortedBox = Object.entries(boxProblem)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5);
+        const problemContainer = document.getElementById("problemBox");
+
+        if (sortedBox.length === 0) {
+          problemContainer.innerHTML = `<div class="bg-green-50 text-green-600 p-5 rounded-2xl text-center font-bold">✅ Semua Kotak P3K Aman!</div>`;
+        } else {
+          sortedBox.forEach((box) => {
+            problemContainer.innerHTML += `
+              <div class="bg-red-50 border border-red-200 rounded-2xl p-5 flex justify-between items-center transition hover:shadow-md">
+                <h3 class="font-black text-xl text-red-600">${box[0]}</h3>
+                <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-lg text-sm">${box[1]} Masalah</span>
+              </div>
+            `;
+          });
+        }
       }
     </script>
   </body>

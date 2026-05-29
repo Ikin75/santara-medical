@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Generator P3K</title>
+    <title>QR Generator P3K - Santara</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -41,54 +41,71 @@
 
           <div class="space-y-6">
             <div>
-              <label class="font-bold mb-3 block"> Nama Perusahaan </label>
+              <label class="font-bold mb-3 block text-gray-700">
+                Nama Perusahaan
+              </label>
               <input
                 type="text"
                 id="company"
-                placeholder="PT Santara Medical"
-                class="w-full border border-gray-200 rounded-2xl p-5"
+                list="companyList"
+                placeholder="Ketik untuk mencari nama perusahaan..."
+                class="w-full border border-gray-200 rounded-2xl p-5 bg-white focus:ring-2 focus:ring-orange-500 focus:outline-none transition"
+                autocomplete="off"
               />
+
+              <datalist id="companyList">
+                <option value="Santara Utama Karya"></option>
+                <option value="Santara Medical"></option>
+                <option value="PT Perusahaan Ketiga"></option>
+                <option value="PT Tambang Nusantara"></option>
+                <option value="PT Pabrik Baja"></option>
+              </datalist>
+              <p class="text-sm text-gray-400 mt-2">
+                *Perusahaan harus dipilih dari daftar resmi yang muncul.
+              </p>
             </div>
 
             <div>
-              <label class="font-bold mb-3 block"> Lokasi </label>
+              <label class="font-bold mb-3 block text-gray-700"> Lokasi </label>
               <input
                 type="text"
                 id="location"
-                placeholder="Gudang A"
-                class="w-full border border-gray-200 rounded-2xl p-5"
+                placeholder="Contoh: Gudang A, Lantai 2, Kantor Utama"
+                class="w-full border border-gray-200 rounded-2xl p-5 focus:ring-2 focus:ring-orange-500 focus:outline-none transition"
               />
             </div>
 
             <div>
-              <label class="font-bold mb-3 block"> Nomor Box </label>
+              <label class="font-bold mb-3 block text-gray-700">
+                Nomor Box
+              </label>
               <input
                 type="text"
                 id="box"
-                placeholder="P3K-001"
-                class="w-full border border-gray-200 rounded-2xl p-5"
+                placeholder="Contoh: P3K-001, P3K-002"
+                class="w-full border border-gray-200 rounded-2xl p-5 focus:ring-2 focus:ring-orange-500 focus:outline-none transition"
               />
             </div>
 
             <button
               onclick="generateQR()"
-              class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-5 rounded-2xl text-xl font-bold shadow-xl"
+              class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-5 rounded-2xl text-xl font-bold shadow-xl shadow-orange-500/20 transform active:scale-[0.99]"
             >
-              Generate QR
+              Generate QR Code
             </button>
           </div>
 
           <div class="mt-14 text-center">
             <div
               id="qrcode"
-              class="bg-white inline-block p-6 rounded-3xl shadow-xl"
+              class="bg-white inline-block p-6 rounded-3xl shadow-xl border border-gray-100"
             ></div>
             <br />
             <a
               id="downloadBtn"
-              class="hidden mt-8 inline-block bg-black hover:bg-gray-800 transition text-white px-8 py-4 rounded-2xl font-bold cursor-pointer"
+              class="hidden mt-8 inline-block bg-black hover:bg-gray-800 transition text-white px-8 py-4 rounded-2xl font-bold cursor-pointer shadow-lg"
             >
-              Download QR
+              Download Gambar QR
             </a>
           </div>
         </div>
@@ -97,20 +114,37 @@
 
     <script>
       function generateQR() {
-        const company = document.getElementById("company").value;
+        const companyInput = document.getElementById("company");
         const location = document.getElementById("location").value;
         const box = document.getElementById("box").value;
 
-        if (!company || !location || !box) {
-          alert("Isi semua data!");
+        // Ambil semua daftar perusahaan resmi dari datalist
+        const datalist = document.getElementById("companyList");
+        const validCompanies = Array.from(datalist.options).map(
+          (option) => option.value,
+        );
+
+        // 1. Validasi Kosong
+        if (!companyInput.value || !location || !box) {
+          alert("Peringatan: Silakan isi semua data terlebih dahulu!");
           return;
         }
 
+        // 2. VALIDASI KETAT: Cek apakah nama yang diinput ada di dalam daftar resmi
+        if (!validCompanies.includes(companyInput.value)) {
+          alert(
+            "❌ ERROR: Nama perusahaan tidak terdaftar dalam sistem! Anda tidak boleh memasukkan nama manual baru secara acak.",
+          );
+          companyInput.value = ""; // Bersihkan kolom input karena salah
+          companyInput.focus();
+          return;
+        }
+
+        // Jika lolos validasi, buat QR Code
         const qrContainer = document.getElementById("qrcode");
         qrContainer.innerHTML = "";
 
-        // URL kini memuat 3 data penting!
-        const url = `https://santara-medical.vercel.app/p3k.html?company=${encodeURIComponent(company)}&location=${encodeURIComponent(location)}&box=${encodeURIComponent(box)}`;
+        const url = `https://santara-medical.vercel.app/p3k.html?company=${encodeURIComponent(companyInput.value)}&location=${encodeURIComponent(location)}&box=${encodeURIComponent(box)}`;
 
         new QRCode(qrContainer, {
           text: url,
@@ -122,7 +156,7 @@
           const img = qrContainer.querySelector("img");
           const downloadBtn = document.getElementById("downloadBtn");
           downloadBtn.href = img.src;
-          downloadBtn.download = `QR_${box}.png`;
+          downloadBtn.download = `QR_${box}_${companyInput.value.replace(/\s+/g, "_")}.png`;
           downloadBtn.classList.remove("hidden");
         }, 500);
       }
