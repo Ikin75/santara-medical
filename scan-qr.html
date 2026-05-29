@@ -120,14 +120,28 @@
               const resultEl = document.getElementById("qrResult");
 
               if (resultEl) {
-                resultEl.value = decodedText;
+                resultEl.innerHTML = `
+      <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all">
+        QR Terdeteksi:
+        <br>
+        ${decodedText}
+      </div>
+    `;
               }
 
-              // STOP scanner dulu
-              html5QrCode.stop();
-
-              // redirect otomatis
-              window.location.href = decodedText;
+              // STOP scanner
+              html5QrCode.stop().then(() => {
+                // redirect sedikit delay
+                setTimeout(() => {
+                  // cek apakah URL valid
+                  if (
+                    decodedText.startsWith("http://") ||
+                    decodedText.startsWith("https://")
+                  ) {
+                    window.location.href = decodedText;
+                  }
+                }, 500);
+              });
             },
 
             // ERROR
