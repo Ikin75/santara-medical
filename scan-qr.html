@@ -74,80 +74,89 @@
     </section>
 
     <script>
-      const html5QrCode = new Html5Qrcode("reader");
+      // Pastikan DOM sudah siap sebelum memanggil elemen
+      document.addEventListener("DOMContentLoaded", () => {
+        const html5QrCode = new Html5Qrcode("reader");
 
-      Html5Qrcode.getCameras().then((devices) => {
-        if (devices && devices.length) {
-          console.log(devices);
+        // Meminta izin akses kamera
+        Html5Qrcode.getCameras()
+          .then((devices) => {
+            if (devices && devices.length) {
+              console.log("Kamera ditemukan:", devices);
 
-          let cameraId = devices[0].id;
+              let cameraId = devices[0].id;
 
-          devices.forEach((device) => {
-            const name = device.label.toLowerCase();
-
-            // pilih kamera belakang terbaik
-
-            if (
-              name.includes("back") ||
-              name.includes("rear") ||
-              name.includes("camera2")
-            ) {
-              cameraId = device.id;
-            }
-          });
-
-          html5QrCode.start(
-            cameraId,
-
-            {
-              fps: 10,
-
-              qrbox: {
-                width: 280,
-                height: 280,
-              },
-
-              aspectRatio: 1.777,
-
-              disableFlip: true,
-            },
-
-            // SUCCESS
-            (decodedText) => {
-              console.log("HASIL:", decodedText);
-
-              // tampilkan hasil
-              const resultEl = document.getElementById("qrResult");
-
-              if (resultEl) {
-                resultEl.innerHTML = `
-      <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all">
-        QR Terdeteksi:
-        <br>
-        ${decodedText}
-      </div>
-    `;
-              }
-
-              // STOP scanner
-              html5QrCode.stop().then(() => {
-                // redirect sedikit delay
-                setTimeout(() => {
-                  // cek apakah URL valid
-                  if (
-                    decodedText.startsWith("http://") ||
-                    decodedText.startsWith("https://")
-                  ) {
-                    window.location.href = decodedText;
-                  }
-                }, 500);
+              // Pilih kamera belakang terbaik
+              devices.forEach((device) => {
+                const name = device.label.toLowerCase();
+                if (
+                  name.includes("back") ||
+                  name.includes("rear") ||
+                  name.includes("environment") || // tambahan kata kunci untuk mobile
+                  name.includes("camera2")
+                ) {
+                  cameraId = device.id;
+                }
               });
-            },
 
-            // ERROR
-            (errorMessage) => {},
-          );
-        }
+              // Mulai kamera
+              html5QrCode
+                .start(
+                  cameraId,
+                  {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }, // Disesuaikan agar lebih fleksibel
+                    // aspectRatio dihapus agar otomatis menyesuaikan kamera perangkat
+                    disableFlip: false,
+                  },
+                  // SUCCESS CALL
+                  (decodedText) => {
+                    console.log("HASIL:", decodedText);
+
+                    const resultEl = document.getElementById("qrResult");
+                    if (resultEl) {
+                      resultEl.innerHTML = `
+                      <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all border border-green-300">
+                        ✅ QR Terdeteksi: <br> ${decodedText}
+                      </div>
+                    `;
+                    }
+
+                    // Hentikan scanner setelah berhasil
+                    html5QrCode.stop().then(() => {
+                      setTimeout(() => {
+                        if (
+                          decodedText.startsWith("http://") ||
+                          decodedText.startsWith("https://")
+                        ) {
+                          window.location.href = decodedText;
+                        }
+                      }, 500);
+                    });
+                  },
+                  // ERROR CALL (Abaikan frame yang gagal terbaca)
+                  (errorMessage) => {
+                    // Tidak perlu di-log agar console tidak penuh
+                  },
+                )
+                .catch((err) => {
+                  // TANGKAP ERROR START KAMERA
+                  console.error("Gagal memulai kamera:", err);
+                  alert(
+                    "Gagal memuat kamera. Pastikan rasio kamera didukung atau coba muat ulang halaman.",
+                  );
+                });
+            } else {
+              alert("Tidak ada kamera yang terdeteksi di perangkat ini.");
+            }
+          })
+          .catch((err) => {
+            // TANGKAP ERROR IZIN DITOLAK ATAU BUKAN HTTPS/LOCALHOST
+            console.error("Error mendapatkan akses kamera:", err);
+            alert(
+              "Akses kamera ditolak! Pastikan Anda mengizinkan akses kamera dan membuka halaman ini melalui Live Server (localhost) atau HTTPS.",
+            );
+          });
       });
     </script>
   </body>
