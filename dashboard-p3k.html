@@ -50,14 +50,36 @@
 
     <section class="py-12 px-6">
       <div class="max-w-7xl mx-auto">
-        <div class="mb-10 text-center md:text-left">
-          <h2 class="text-4xl md:text-5xl font-black mb-4">
-            📊 Dashboard Analytics
-          </h2>
-          <p class="text-gray-500 text-lg">
-            Monitoring inspeksi kotak P3K secara realtime.
-          </p>
+        <div
+          class="flex flex-col md:flex-row justify-between items-end gap-6 mb-10 border-b border-gray-200 pb-6"
+        >
+          <div>
+            <h2 class="text-4xl md:text-5xl font-black mb-2">
+              📊 Dashboard Analytics
+            </h2>
+            <p class="text-gray-500 text-lg">
+              Monitoring inspeksi kotak P3K secara realtime.
+            </p>
+          </div>
+          <div class="w-full md:w-auto">
+            <label class="text-sm font-bold text-gray-500 block mb-2"
+              >Filter Perusahaan:</label
+            >
+            <select
+              id="companyFilter"
+              class="w-full md:w-72 p-4 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-orange-500 outline-none font-bold text-gray-800 cursor-pointer appearance-none bg-white"
+            >
+              <option value="ALL">🏢 Semua Perusahaan</option>
+            </select>
+          </div>
         </div>
+
+        <p
+          class="text-center text-orange-500 font-bold animate-pulse mb-6"
+          id="loadingText"
+        >
+          Mengambil data dari server...
+        </p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
           <div
@@ -121,7 +143,7 @@
             <h3 class="text-2xl font-black mb-6 text-center md:text-left">
               Status Item Keseluruhan
             </h3>
-            <div class="w-full max-w-sm mx-auto">
+            <div class="w-full max-w-sm mx-auto relative">
               <canvas id="statusChart"></canvas>
             </div>
           </div>
@@ -134,11 +156,7 @@
             <div
               id="problemBox"
               class="space-y-4 max-h-[300px] overflow-y-auto pr-2"
-            >
-              <p class="text-gray-400 text-center italic py-4" id="loadingText">
-                Memuat data dari server...
-              </p>
-            </div>
+            ></div>
           </div>
         </div>
       </div>
@@ -149,11 +167,18 @@
       const SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec";
 
+      let globalData = []; // Simpan semua data dari server
+      let myChart = null; // Variabel untuk menyimpan status grafik agar bisa di-reset
+
       fetch(SCRIPT_URL)
         .then((res) => res.json())
         .then((data) => {
           document.getElementById("loadingText").style.display = "none";
-          analyzeData(data);
+          // Saring data kosong
+          globalData = data.filter((row) => row.box && row.status);
+
+          setupFilter(globalData);
+          renderDashboard("ALL");
         })
         .catch((err) => {
           document.getElementById("loadingText").innerText =
@@ -161,12 +186,39 @@
           console.error(err);
         });
 
-      function analyzeData(data) {
-        // Abaikan data yang kosong
-        const validData = data.filter((row) => row.box && row.status);
+      // MENGISI MENU DROPDOWN FILTER
+      function setupFilter(data) {
+        const select = document.getElementById("companyFilter");
+        // Ambil nama perusahaan secara unik (tidak ada duplikat)
+        const uniqueCompanies = [
+          ...new Set(data.map((item) => item.company).filter(Boolean)),
+        ];
 
-        document.getElementById("totalInspection").innerText = validData.length;
-        const uniqueBox = [...new Set(validData.map((row) => row.box))];
+        uniqueCompanies.forEach((company) => {
+          select.innerHTML += `<option value="${company}">${company}</option>`;
+        });
+
+        // Pasang sensor: Jika filter diubah, render ulang dashboardnya
+        select.addEventListener("change", (e) => {
+          renderDashboard(e.target.value);
+        });
+      }
+
+      // RENDER ULANG DASHBOARD BERDASARKAN FILTER
+      function renderDashboard(companyName) {
+        let filteredData = globalData;
+
+        // Saring data jika yang dipilih bukan "ALL"
+        if (companyName !== "ALL") {
+          filteredData = globalData.filter(
+            (item) => item.company === companyName,
+          );
+        }
+
+        // UPDATE KOTAK ANGKA (SUMMARY)
+        document.getElementById("totalInspection").innerText =
+          filteredData.length;
+        const uniqueBox = [...new Set(filteredData.map((row) => row.box))];
         document.getElementById("totalBox").innerText = uniqueBox.length;
 
         let aman = 0,
@@ -174,7 +226,7 @@
           expired = 0;
         let boxProblem = {};
 
-        validData.forEach((row) => {
+        filteredData.forEach((row) => {
           if (row.status === "Aman") aman++;
           if (row.status === "Kurang") {
             kurang++;
@@ -189,8 +241,13 @@
         document.getElementById("totalLess").innerText = kurang;
         document.getElementById("totalExpired").innerText = expired;
 
-        // RENDER CHART DENGAN WARNA BRAND SANTARA
-        new Chart(document.getElementById("statusChart"), {
+        // RENDER GRAFIK
+        if (myChart) {
+          myChart.destroy(); // Hancurkan grafik lama sebelum membuat yang baru agar tidak tumpang tindih
+        }
+
+        const ctx = document.getElementById("statusChart").getContext("2d");
+        myChart = new Chart(ctx, {
           type: "doughnut",
           data: {
             labels: ["Aman", "Kurang", "Expired"],
@@ -206,14 +263,16 @@
           options: { plugins: { legend: { position: "bottom" } } },
         });
 
-        // RENDER PROBLEM BOX
+        // RENDER KOTAK BERMASALAH
         const sortedBox = Object.entries(boxProblem)
           .sort((a, b) => b[1] - a[1])
           .slice(0, 5);
         const problemContainer = document.getElementById("problemBox");
 
+        problemContainer.innerHTML = ""; // Bersihkan list sebelumnya
+
         if (sortedBox.length === 0) {
-          problemContainer.innerHTML = `<div class="bg-green-50 text-green-600 p-5 rounded-2xl text-center font-bold">✅ Semua Kotak P3K Aman!</div>`;
+          problemContainer.innerHTML = `<div class="bg-green-50 text-green-600 p-5 rounded-2xl text-center font-bold">✅ Tidak ada masalah di perusahaan ini!</div>`;
         } else {
           sortedBox.forEach((box) => {
             problemContainer.innerHTML += `
