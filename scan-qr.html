@@ -18,41 +18,6 @@
       body {
         font-family: "Poppins", sans-serif;
       }
-      /* Styling untuk merapikan UI bawaan scanner */
-      #reader {
-        width: 100%;
-        border-radius: 24px;
-        overflow: hidden;
-        border: 4px solid #f97316;
-        background: white;
-        padding: 16px;
-      }
-      #reader button {
-        background-color: #f97316;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 12px;
-        font-weight: bold;
-        margin: 5px;
-        cursor: pointer;
-        border: none;
-        transition: 0.3s;
-      }
-      #reader button:hover {
-        background-color: #ea580c;
-      }
-      #reader a {
-        color: #f97316;
-        font-weight: bold;
-        text-decoration: none;
-      }
-      #reader select {
-        padding: 8px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-        width: 100%;
-      }
     </style>
   </head>
 
@@ -76,68 +41,123 @@
         <div class="bg-white rounded-3xl shadow-2xl p-10 text-center">
           <h2 class="text-4xl font-black mb-4">Scan QR Kotak P3K</h2>
           <p class="text-gray-500 text-lg mb-10">
-            Gunakan kamera atau upload foto QR Code.
+            Jepret foto QR Code menggunakan kamera bawaan HP Anda agar hasil
+            lebih tajam.
           </p>
 
-          <div id="reader" class="mx-auto shadow-md"></div>
+          <img
+            id="imagePreview"
+            class="hidden w-full max-w-sm mx-auto rounded-3xl border-4 border-orange-500 mb-8 object-cover shadow-lg"
+            alt="Preview QR"
+          />
 
-          <div id="qrResult"></div>
+          <div
+            id="loadingText"
+            class="hidden text-orange-500 font-bold text-xl mb-6 animate-pulse"
+          >
+            ⏳ Sedang membaca QR Code...
+          </div>
+
+          <input
+            type="file"
+            id="cameraInput"
+            accept="image/*"
+            capture="environment"
+            class="hidden"
+          />
+          <input
+            type="file"
+            id="galleryInput"
+            accept="image/*"
+            class="hidden"
+          />
+
+          <div class="flex flex-col gap-4 max-w-sm mx-auto">
+            <button
+              onclick="document.getElementById('cameraInput').click()"
+              class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl text-lg shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-3"
+            >
+              <span class="text-2xl">📸</span> Buka Kamera HP
+            </button>
+
+            <button
+              onclick="document.getElementById('galleryInput').click()"
+              class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-4 rounded-2xl text-lg shadow-md transition-all flex items-center justify-center gap-3"
+            >
+              <span class="text-2xl">🖼️</span> Pilih dari Galeri
+            </button>
+          </div>
+
+          <div id="qrResult" class="mt-8"></div>
+
+          <div id="reader-placeholder" class="hidden"></div>
         </div>
       </div>
     </section>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // MENGGUNAKAN Html5QrcodeScanner (Lebih stabil dari Html5Qrcode biasa)
-        const html5QrcodeScanner = new Html5QrcodeScanner(
-          "reader",
-          {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            // Fokus hanya pada format QR Code agar cepat
-            formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
-            // Mengizinkan scan via kamera DAN via file upload
-            supportedScanTypes: [
-              Html5QrcodeScanType.SCAN_TYPE_CAMERA,
-              Html5QrcodeScanType.SCAN_TYPE_FILE,
-            ],
-          },
-          false, // Verbose log dimatikan
-        );
+        // Inisialisasi mesin AI pembaca QR
+        const html5QrCode = new Html5Qrcode("reader-placeholder");
 
-        // RENDER UI & JALANKAN LOGIKA
-        html5QrcodeScanner.render(
-          // KETIKA BERHASIL (Kamera atau Foto)
-          (decodedText, decodedResult) => {
-            console.log("HASIL:", decodedText);
+        const cameraInput = document.getElementById("cameraInput");
+        const galleryInput = document.getElementById("galleryInput");
+        const imagePreview = document.getElementById("imagePreview");
+        const loadingText = document.getElementById("loadingText");
+        const resultEl = document.getElementById("qrResult");
 
-            const resultEl = document.getElementById("qrResult");
-            if (resultEl) {
+        // Fungsi Utama untuk membaca file foto
+        function processImage(event) {
+          if (event.target.files.length === 0) return;
+          const file = event.target.files[0];
+
+          // 1. Tampilkan foto yang baru saja dijepret
+          imagePreview.src = URL.createObjectURL(file);
+          imagePreview.classList.remove("hidden");
+
+          // 2. Tampilkan status loading & bersihkan hasil lama
+          loadingText.classList.remove("hidden");
+          resultEl.innerHTML = "";
+
+          // 3. Mesin mulai membaca foto
+          html5QrCode
+            .scanFile(file, true)
+            .then((decodedText) => {
+              // Jika SUKSES terbaca
+              loadingText.classList.add("hidden");
               resultEl.innerHTML = `
-                <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all border border-green-300 shadow-md">
-                  ✅ QR Berhasil Terbaca: <br> ${decodedText}
+                <div class="bg-green-100 text-green-700 p-5 rounded-2xl font-bold break-all border border-green-300 shadow-md">
+                  ✅ QR Ditemukan: <br> <span class="text-sm font-normal">${decodedText}</span>
                 </div>
               `;
-            }
 
-            // Hentikan scanner setelah sukses membaca
-            html5QrcodeScanner.clear();
+              // Langsung pindah ke link tujuan setelah 1 detik
+              setTimeout(() => {
+                if (
+                  decodedText.startsWith("http://") ||
+                  decodedText.startsWith("https://")
+                ) {
+                  window.location.href = decodedText;
+                }
+              }, 1000);
+            })
+            .catch((err) => {
+              // Jika GAGAL terbaca (Foto buram/Tidak ada QR)
+              loadingText.classList.add("hidden");
+              resultEl.innerHTML = `
+                <div class="bg-red-100 text-red-700 p-5 rounded-2xl font-bold border border-red-300 shadow-md">
+                  ❌ QR tidak terbaca. Pastikan foto fokus dan tidak silau.
+                </div>
+              `;
+            });
 
-            // Redirect ke link hasil scan
-            setTimeout(() => {
-              if (
-                decodedText.startsWith("http://") ||
-                decodedText.startsWith("https://")
-              ) {
-                window.location.href = decodedText;
-              }
-            }, 500);
-          },
-          // KETIKA GAGAL / SEDANG MENCARI (Abaikan)
-          (errorMessage) => {
-            // Kosongkan agar konsol tidak error saat kamera mencari fokus
-          },
-        );
+          // Reset input file agar bisa memfoto ulang berkali-kali
+          event.target.value = "";
+        }
+
+        // Pasang sensor ke kedua tombol input
+        cameraInput.addEventListener("change", processImage);
+        galleryInput.addEventListener("change", processImage);
       });
     </script>
   </body>
