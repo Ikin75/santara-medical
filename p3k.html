@@ -290,6 +290,7 @@
       ];
 
       const tableBody = document.getElementById("tableBody");
+      let lastInspection = {};
 
       items.forEach((item, index) => {
         setTimeout(() => {
@@ -701,6 +702,15 @@
 
             .then((history) => {
               console.log("HISTORY:", history);
+
+              // AMBIL DATA TERAKHIR
+
+              history.forEach((row) => {
+                lastInspection[row.item] = row.actual;
+              });
+
+              // UPDATE TABEL
+              updateLastInspection();
             });
         }
 
@@ -709,6 +719,38 @@
           document.getElementById("location").value = locationName;
         }
       });
+
+      function updateLastInspection() {
+        items.forEach((item, index) => {
+          const last = lastInspection[item.name] || 0;
+
+          // TAMPILKAN BULAN LALU
+          document.getElementById(`last-${index}`).innerText = last;
+
+          // AKTUAL SEKARANG
+          const actual = parseInt(
+            document.getElementById(`actual-${index}`).value,
+          );
+
+          // HITUNG SELISIH
+          const diff = actual - last;
+
+          const diffEl = document.getElementById(`diff-${index}`);
+
+          diffEl.innerText = diff;
+
+          diffEl.className = "font-bold";
+
+          // WARNA
+          if (diff < 0) {
+            diffEl.classList.add("text-red-500");
+          } else if (diff > 0) {
+            diffEl.classList.add("text-green-500");
+          } else {
+            diffEl.classList.add("text-gray-500");
+          }
+        });
+      }
     </script>
   </body>
 </html>
