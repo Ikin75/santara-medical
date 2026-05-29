@@ -3,18 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Warning P3K</title>
-
+    <title>Warning P3K - Santara</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-
     <style>
       body {
         font-family: "Poppins", sans-serif;
@@ -22,195 +16,208 @@
     </style>
   </head>
 
-  <body class="bg-red-50">
-    <header class="bg-black text-white py-5 shadow-xl">
+  <body class="bg-red-50/30">
+    <script>
+      if (localStorage.getItem("isLogin") !== "true") {
+        window.location.href = "login.html";
+      }
+      function logoutAdmin() {
+        localStorage.removeItem("isLogin");
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <header class="bg-black text-white py-5 shadow-xl sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <h1 class="text-3xl font-black">
-          <span class="text-orange-500"> Santara </span>
-
-          Warning P3K
+          <span class="text-orange-500">Santara</span> Warning
         </h1>
-
-        <a
-          href="dashboard-p3k.html"
-          class="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-xl font-semibold"
-        >
-          Dashboard
-        </a>
+        <div class="flex gap-3">
+          <a
+            href="dashboard-p3k.html"
+            class="bg-gray-800 hover:bg-gray-700 transition px-5 py-3 rounded-xl font-semibold hidden sm:block"
+            >Dashboard</a
+          >
+          <button
+            onclick="logoutAdmin()"
+            class="bg-red-500 hover:bg-red-600 transition px-5 py-3 rounded-xl font-semibold"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </header>
 
     <section class="py-12 px-6">
       <div class="max-w-7xl mx-auto">
-        <div class="mb-10">
-          <h2 class="text-5xl font-black text-red-600 mb-4">
-            🚨 Box Bermasalah
-          </h2>
+        <div
+          class="flex flex-col md:flex-row justify-between items-end gap-6 mb-10 border-b border-red-200 pb-6"
+        >
+          <div>
+            <h2
+              class="text-4xl md:text-5xl font-black text-red-600 mb-2 flex items-center gap-3"
+            >
+              🚨 Box Bermasalah
+            </h2>
+            <p class="text-gray-600 text-lg">
+              Daftar item P3K yang Kurang dan Expired.
+            </p>
+          </div>
 
-          <p class="text-gray-600 text-lg">Daftar item kurang dan expired.</p>
+          <div class="w-full md:w-auto">
+            <label class="text-sm font-bold text-gray-500 block mb-2"
+              >Filter Perusahaan:</label
+            >
+            <select
+              id="companyFilter"
+              class="w-full md:w-72 p-4 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-orange-500 outline-none font-bold text-gray-800 cursor-pointer appearance-none bg-white"
+            >
+              <option value="ALL">🏢 Semua Perusahaan</option>
+            </select>
+          </div>
         </div>
+
+        <p
+          class="text-center text-orange-500 font-bold animate-pulse mb-6"
+          id="loadingText"
+        >
+          Menarik data peringatan...
+        </p>
 
         <div id="warningContainer" class="grid md:grid-cols-2 gap-8"></div>
       </div>
     </section>
 
     <script>
-      if (localStorage.getItem("isLogin") != "true") {
-        window.location.href = "login.html";
-      }
-    </script>
+      // WAJIB SAMA DENGAN GOOGLE SCRIPT MILIKMU
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec";
+      let allWarningData = [];
 
-    <script>
-      fetch(
-        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec",
-      )
+      fetch(SCRIPT_URL)
         .then((res) => res.json())
-
         .then((data) => {
-          console.log(data);
+          document.getElementById("loadingText").style.display = "none";
 
-          showWarning(data);
+          // Filter HANYA data yang Kurang atau Expired
+          allWarningData = data
+            .filter(
+              (row) => row.status === "Kurang" || row.status === "Expired",
+            )
+            .reverse();
+
+          setupCompanyFilter();
+          showWarning("ALL");
+        })
+        .catch((err) => {
+          document.getElementById("loadingText").innerText =
+            "Gagal memuat data dari server.";
+          console.error(err);
         });
 
-      function showWarning(data) {
+      // MENGISI MENU FILTER PERUSAHAAN
+      function setupCompanyFilter() {
+        const select = document.getElementById("companyFilter");
+        const uniqueCompanies = [
+          ...new Set(
+            allWarningData.map((item) => item.company).filter(Boolean),
+          ),
+        ];
+
+        uniqueCompanies.forEach((company) => {
+          select.innerHTML += `<option value="${company}">${company}</option>`;
+        });
+
+        // Event listener saat dropdown berubah
+        select.addEventListener("change", (e) => {
+          showWarning(e.target.value);
+        });
+      }
+
+      // RENDER KARTU WARNING
+      function showWarning(companyName) {
         const container = document.getElementById("warningContainer");
+        container.innerHTML = ""; // Bersihkan kontainer
 
-        const filtered = data.filter(
-          (row) => row.status == "Kurang" || row.status == "Expired",
-        );
+        let filtered = allWarningData;
+        if (companyName !== "ALL") {
+          filtered = allWarningData.filter(
+            (row) => row.company === companyName,
+          );
+        }
 
-        if (filtered.length == 0) {
+        if (filtered.length === 0) {
           container.innerHTML = `
-
-<div class="
-bg-white rounded-3xl p-10
-shadow-2xl text-center
-col-span-2
-">
-
-<h2 class="text-4xl font-black text-green-500">
-
-✅ Semua Box Aman
-
-</h2>
-
-<p class="text-gray-500 mt-4 text-lg">
-
-Tidak ada item kurang atau expired.
-
-</p>
-
-</div>
-
-`;
-
+            <div class="bg-white rounded-3xl p-10 shadow-2xl text-center col-span-1 md:col-span-2 border border-green-100">
+              <h2 class="text-4xl font-black text-green-500 mb-4">✅ Semua Box Aman</h2>
+              <p class="text-gray-500 text-lg">Tidak ada item kurang atau expired pada pilihan perusahaan ini.</p>
+            </div>
+          `;
           return;
         }
 
-        filtered.reverse().forEach((row) => {
+        filtered.forEach((row) => {
+          // Format Tanggal
+          let dateStr = "-";
+          if (row.date) {
+            const d = new Date(row.date);
+            if (!isNaN(d)) {
+              dateStr = d.toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              });
+            }
+          }
+
+          const borderColor =
+            row.status === "Expired" ? "border-red-500" : "border-yellow-500";
+          const badgeColor =
+            row.status === "Expired" ? "bg-red-500" : "bg-yellow-500";
+
           container.innerHTML += `
+            <div class="bg-white rounded-3xl shadow-xl p-8 border-l-8 ${borderColor} relative overflow-hidden group hover:shadow-2xl transition duration-300">
+              
+              <div class="flex justify-between items-start mb-6">
+                <div>
+                  <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">${row.company || "Perusahaan Tidak Diketahui"}</p>
+                  <h3 class="text-3xl font-black text-gray-800">${row.box}</h3>
+                  <p class="text-gray-500 mt-1 font-medium flex items-center gap-1">📍 ${row.location}</p>
+                </div>
+                <span class="px-5 py-2 rounded-xl text-white font-black uppercase tracking-wider shadow-md ${badgeColor}">
+                  ${row.status}
+                </span>
+              </div>
 
-<div class="
-bg-white rounded-3xl
-shadow-2xl p-8
-border-l-8
+              <div class="bg-gray-50 p-5 rounded-2xl space-y-3 text-gray-700 border border-gray-100">
+                <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+                  <span class="font-semibold text-gray-500">Item:</span>
+                  <span class="font-black text-lg text-gray-900">${row.item}</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+                  <span class="font-semibold text-gray-500">Aktual di Kotak:</span>
+                  <span class="font-black text-lg text-gray-900">${row.actual !== undefined ? row.actual : "-"}</span>
+                </div>
+                <div class="flex justify-between items-center pb-1">
+                  <span class="font-semibold text-gray-500">Petugas Inspeksi:</span>
+                  <span class="font-bold capitalize">${row.officer || "-"}</span>
+                </div>
+              </div>
 
-${row.status == "Expired" ? "border-red-500" : "border-yellow-500"}
-">
-
-<div class="
-flex justify-between items-start
-mb-6
-">
-
-<div>
-
-<h3 class="text-3xl font-black">
-
-${row.box}
-
-</h3>
-
-<p class="text-gray-500 mt-2">
-
-${row.location}
-
-</p>
-
-</div>
-
-<span class="
-px-5 py-3 rounded-2xl
-text-white font-bold
-
-${row.status == "Expired" ? "bg-red-500" : "bg-yellow-500"}
-">
-
-${row.status}
-
-</span>
-
-</div>
-
-<div class="space-y-3 text-lg">
-
-<p>
-
-<strong>Item:</strong>
-${row.item}
-
-</p>
-
-<p>
-
-<strong>Aktual:</strong>
-${row.actual}
-
-</p>
-
-<p>
-
-<strong>Petugas:</strong>
-${row.officer}
-
-</p>
-
-<p>
-
-<strong>Tanggal:</strong>
-
-${new Date(row.date).toLocaleDateString("id-ID")}
-
-</p>
-
-</div>
-
-${
-  row.photo
-    ? `
-
-<a
-href="${row.photo}"
-target="_blank"
-class="
-mt-6 inline-block
-bg-black text-white
-px-5 py-3 rounded-2xl
-font-bold
-"
->
-
-📷 Lihat Foto
-
-</a>
-
-`
-    : ""
-}
-
-</div>
-
-`;
+              <div class="mt-6 flex justify-between items-center">
+                <p class="text-sm font-semibold text-gray-400">📅 ${dateStr}</p>
+                ${
+                  row.photo
+                    ? `
+                  <a href="${row.photo}" target="_blank" class="bg-black hover:bg-gray-800 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-md flex items-center gap-2">
+                    📷 Foto Aktual
+                  </a>
+                `
+                    : ""
+                }
+              </div>
+            </div>
+          `;
         });
       }
     </script>
