@@ -68,63 +68,56 @@
             id="reader"
             class="w-full max-w-xl mx-auto overflow-hidden rounded-3xl shadow-2xl border-4 border-orange-500"
           ></div>
+          <div id="result" class="mt-5"></div>
         </div>
       </div>
     </section>
 
     <script>
-      function onScanSuccess(decodedText) {
+      function onScanSuccess(decodedText, decodedResult) {
+        console.log("QR RESULT:", decodedText);
+
+        // tampilkan hasil
+        document.getElementById("result").innerHTML = `
+      <div class="bg-green-100 text-green-700 p-4 rounded-2xl font-bold">
+        QR Terdeteksi:
+        <br>
+        ${decodedText}
+      </div>
+      `;
+
+        // buka otomatis
         window.location.href = decodedText;
+      }
+
+      function onScanFailure(error) {
+        // biarkan kosong supaya tidak spam error
       }
 
       const html5QrCode = new Html5Qrcode("reader");
 
-      Html5Qrcode.getCameras().then((devices) => {
-        if (devices && devices.length) {
-          console.log(devices);
-
-          // PILIH KAMERA BELAKANG PALING BAGUS
-
-          let cameraId = devices[0].id;
-
-          devices.forEach((device) => {
-            const name = device.label.toLowerCase();
-
-            // hindari ultrawide/macro
-
-            if (
-              name.includes("back") ||
-              name.includes("rear") ||
-              name.includes("camera2")
-            ) {
-              cameraId = device.id;
-            }
-          });
-
-          html5QrCode.start(
-            cameraId,
-
-            {
-              fps: 10,
-
-              qrbox: {
-                width: 280,
-                height: 280,
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          if (devices && devices.length) {
+            html5QrCode.start(
+              {
+                facingMode: "environment",
               },
 
-              aspectRatio: 1.777,
+              {
+                fps: 10,
+                qrbox: 250,
+                aspectRatio: 1.7778,
+              },
 
-              disableFlip: true,
-            },
-
-            (decodedText) => {
-              document.getElementById("qrResult").value = decodedText;
-            },
-
-            (errorMessage) => {},
-          );
-        }
-      });
+              onScanSuccess,
+              onScanFailure,
+            );
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     </script>
   </body>
 </html>
