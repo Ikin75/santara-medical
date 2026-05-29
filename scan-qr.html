@@ -68,29 +68,24 @@
             id="reader"
             class="w-full max-w-xl mx-auto overflow-hidden rounded-3xl shadow-2xl border-4 border-orange-500"
           ></div>
+          <div id="qrResult"></div>
         </div>
       </div>
     </section>
 
     <script>
-      function onScanSuccess(decodedText) {
-        window.location.href = decodedText;
-      }
-
       const html5QrCode = new Html5Qrcode("reader");
 
       Html5Qrcode.getCameras().then((devices) => {
         if (devices && devices.length) {
           console.log(devices);
 
-          // PILIH KAMERA BELAKANG PALING BAGUS
-
           let cameraId = devices[0].id;
 
           devices.forEach((device) => {
             const name = device.label.toLowerCase();
 
-            // hindari ultrawide/macro
+            // pilih kamera belakang terbaik
 
             if (
               name.includes("back") ||
@@ -117,10 +112,25 @@
               disableFlip: true,
             },
 
+            // SUCCESS
             (decodedText) => {
-              document.getElementById("qrResult").value = decodedText;
+              console.log("HASIL:", decodedText);
+
+              // tampilkan hasil
+              const resultEl = document.getElementById("qrResult");
+
+              if (resultEl) {
+                resultEl.value = decodedText;
+              }
+
+              // STOP scanner dulu
+              html5QrCode.stop();
+
+              // redirect otomatis
+              window.location.href = decodedText;
             },
 
+            // ERROR
             (errorMessage) => {},
           );
         }
