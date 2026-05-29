@@ -16,7 +16,7 @@
     </style>
   </head>
   <body class="bg-gray-100 min-h-screen p-6">
-    <div class="max-w-xl mx-auto bg-white rounded-3xl shadow-xl p-8 mt-10">
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8 mt-10">
       <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
         <a
           id="backBtn"
@@ -55,88 +55,223 @@
 
         <input type="hidden" id="location" />
 
-        <div>
-          <label class="font-bold mb-2 block text-gray-800"
-            >Nama Lengkap Pekerja</label
-          >
-          <input
-            type="text"
-            id="nama"
-            required
-            placeholder="Contoh: Budi Santoso"
-            class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
-          />
-        </div>
-
-        <div>
-          <label class="font-bold mb-2 block text-gray-800"
-            >Departemen / Bagian</label
-          >
-          <input
-            type="text"
-            id="departemen"
-            required
-            placeholder="Contoh: Produksi, Gudang, Office"
-            class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
-          />
-        </div>
-
-        <div class="grid grid-cols-3 gap-4">
-          <div class="col-span-2">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
             <label class="font-bold mb-2 block text-gray-800"
-              >Item yang Diambil</label
+              >Nama Lengkap Pekerja</label
             >
-            <select
-              id="itemAmbil"
+            <input
+              type="text"
+              id="nama"
               required
-              onchange="cekLainnya()"
-              class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none bg-white cursor-pointer"
-            >
-              <option value="" disabled selected>-- Pilih Item --</option>
-              <option value="Kassa steril">Kassa steril</option>
-              <option value="Plester Cepat">Plester Cepat</option>
-              <option value="Alkohol 70%">Alkohol 70%</option>
-              <option value="Povidon iodin / Obat Merah">
-                Povidon iodin / Obat Merah
-              </option>
-              <option value="Minyak Kayu Putih">Minyak Kayu Putih</option>
-              <option value="Lainnya">Lainnya (Ketik Manual)</option>
-            </select>
+              placeholder="Contoh: Budi Santoso"
+              class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
+            />
           </div>
           <div>
-            <label class="font-bold mb-2 block text-gray-800">Jumlah</label>
+            <label class="font-bold mb-2 block text-gray-800"
+              >Departemen / Bagian</label
+            >
             <input
-              type="number"
-              id="jumlah"
-              min="1"
+              type="text"
+              id="departemen"
               required
-              placeholder="1"
+              placeholder="Contoh: Produksi, Gudang, Office"
               class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
             />
           </div>
         </div>
 
-        <div id="divLainnya" class="hidden animate-pulse">
-          <label class="font-bold mb-2 block text-orange-500"
-            >Tuliskan Nama Item Lainnya:</label
+        <div>
+          <label class="font-bold mb-3 block text-gray-800"
+            >Pilih Item yang Diambil (Bisa Lebih dari Satu):</label
           >
-          <input
-            type="text"
-            id="itemLainnya"
-            placeholder="Ketik nama barang yang diambil..."
-            class="w-full border-2 border-orange-200 bg-orange-50 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
-          />
+
+          <div
+            id="itemSelectionContainer"
+            class="bg-gray-50 rounded-2xl p-5 border border-gray-200 space-y-4 max-h-72 overflow-y-auto"
+          >
+            <div
+              class="flex items-center justify-between p-2 hover:bg-white rounded-xl transition"
+            >
+              <label
+                class="flex items-center gap-3 cursor-pointer font-medium text-gray-700 select-none"
+              >
+                <input
+                  type="checkbox"
+                  value="Kassa steril terbungkus"
+                  onchange="toggleQtyInput(this)"
+                  class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span>Kassa steril terbungkus</span>
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Pcs"
+                disabled
+                class="qty-input w-20 border border-gray-200 rounded-lg p-2 text-center bg-gray-100 focus:ring-2 focus:ring-orange-500 outline-none hidden"
+              />
+            </div>
+
+            <div
+              class="flex items-center justify-between p-2 hover:bg-white rounded-xl transition"
+            >
+              <label
+                class="flex items-center gap-3 cursor-pointer font-medium text-gray-700 select-none"
+              >
+                <input
+                  type="checkbox"
+                  value="Plester cepat"
+                  onchange="toggleQtyInput(this)"
+                  class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span>Plester cepat</span>
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Pcs"
+                disabled
+                class="qty-input w-20 border border-gray-200 rounded-lg p-2 text-center bg-gray-100 focus:ring-2 focus:ring-orange-500 outline-none hidden"
+              />
+            </div>
+
+            <div
+              class="flex items-center justify-between p-2 hover:bg-white rounded-xl transition"
+            >
+              <label
+                class="flex items-center gap-3 cursor-pointer font-medium text-gray-700 select-none"
+              >
+                <input
+                  type="checkbox"
+                  value="Alkohol 70%"
+                  onchange="toggleQtyInput(this)"
+                  class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span>Alkohol 70%</span>
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Botol"
+                disabled
+                class="qty-input w-20 border border-gray-200 rounded-lg p-2 text-center bg-gray-100 focus:ring-2 focus:ring-orange-500 outline-none hidden"
+              />
+            </div>
+
+            <div
+              class="flex items-center justify-between p-2 hover:bg-white rounded-xl transition"
+            >
+              <label
+                class="flex items-center gap-3 cursor-pointer font-medium text-gray-700 select-none"
+              >
+                <input
+                  type="checkbox"
+                  value="Povidon iodin 60 ml"
+                  onchange="toggleQtyInput(this)"
+                  class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span>Povidon iodin / Obat Merah</span>
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Botol"
+                disabled
+                class="qty-input w-20 border border-gray-200 rounded-lg p-2 text-center bg-gray-100 focus:ring-2 focus:ring-orange-500 outline-none hidden"
+              />
+            </div>
+
+            <div
+              class="flex items-center justify-between p-2 hover:bg-white rounded-xl transition"
+            >
+              <label
+                class="flex items-center gap-3 cursor-pointer font-medium text-gray-700 select-none"
+              >
+                <input
+                  type="checkbox"
+                  value="Perban 5 cm"
+                  onchange="toggleQtyInput(this)"
+                  class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span>Perban 5 cm</span>
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Roll"
+                disabled
+                class="qty-input w-20 border border-gray-200 rounded-lg p-2 text-center bg-gray-100 focus:ring-2 focus:ring-orange-500 outline-none hidden"
+              />
+            </div>
+
+            <div
+              class="flex items-center justify-between p-2 hover:bg-white rounded-xl transition"
+            >
+              <label
+                class="flex items-center gap-3 cursor-pointer font-medium text-gray-700 select-none"
+              >
+                <input
+                  type="checkbox"
+                  value="Sarung tangan non steril"
+                  onchange="toggleQtyInput(this)"
+                  class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span>Sarung tangan</span>
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Pasang"
+                disabled
+                class="qty-input w-20 border border-gray-200 rounded-lg p-2 text-center bg-gray-100 focus:ring-2 focus:ring-orange-500 outline-none hidden"
+              />
+            </div>
+
+            <div
+              class="flex flex-col gap-2 p-2 hover:bg-white rounded-xl transition border-t border-gray-200 pt-3"
+            >
+              <label
+                class="flex items-center gap-3 cursor-pointer font-medium text-orange-600 select-none"
+              >
+                <input
+                  type="checkbox"
+                  id="checkLainnya"
+                  value="Lainnya"
+                  onchange="toggleLainnyaInput(this)"
+                  class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span>Barang Lainnya (Ketik Manual)</span>
+              </label>
+              <div id="divLainnya" class="hidden flex gap-2 mt-1">
+                <input
+                  type="text"
+                  id="textLainnya"
+                  placeholder="Nama barang..."
+                  class="flex-1 border border-gray-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none"
+                />
+                <input
+                  type="number"
+                  id="qtyLainnya"
+                  min="1"
+                  placeholder="Jumlah"
+                  class="w-20 border border-gray-200 rounded-lg p-2 text-center focus:ring-2 focus:ring-orange-500 outline-none"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>
           <label class="font-bold mb-2 block text-gray-800"
-            >Keterangan / Alasan (Luka)</label
+            >Keterangan / Alasan (Kronologi Luka)</label
           >
           <textarea
             id="alasan"
             required
             rows="3"
-            placeholder="Contoh: Tersayat pisau cutter saat memotong kardus."
+            placeholder="Contoh: Tersayat besi tajam di area lini perakitan."
             class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
           ></textarea>
         </div>
@@ -145,13 +280,12 @@
           type="submit"
           class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-orange-500/20 transform active:scale-95"
         >
-          Kirim Laporan
+          Kirim Semua Laporan
         </button>
       </form>
     </div>
 
     <script>
-      // WAJIB SAMAKAN DENGAN LINK GOOGLE SCRIPT MILIKMU
       const SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec";
 
@@ -161,73 +295,142 @@
         document.getElementById("box").value = params.get("box") || "-";
         document.getElementById("location").value =
           params.get("location") || "-";
-
-        // Link kembali ke portal
         document.getElementById("backBtn").href =
           "portal-p3k.html" + window.location.search;
       });
 
-      // FUNGSI MEMUNCULKAN KOTAK KETIK MANUAL
-      function cekLainnya() {
-        const pilihan = document.getElementById("itemAmbil").value;
-        const divLainnya = document.getElementById("divLainnya");
-        const inputLainnya = document.getElementById("itemLainnya");
+      // AKTIFKAN INPUT JUMLAH SAAT CHECKBOX DICENTANG
+      function toggleQtyInput(checkbox) {
+        const row = checkbox.closest(".flex");
+        const qtyInput = row.querySelector(".qty-input");
 
-        if (pilihan === "Lainnya") {
-          divLainnya.classList.remove("hidden");
-          inputLainnya.setAttribute("required", "true");
+        if (checkbox.checked) {
+          qtyInput.classList.remove("hidden");
+          qtyInput.removeAttribute("disabled");
+          qtyInput.setAttribute("required", "true");
+          qtyInput.value = 1; // Default angka 1
+          qtyInput.focus();
         } else {
-          divLainnya.classList.add("hidden");
-          inputLainnya.removeAttribute("required");
-          inputLainnya.value = ""; // Bersihkan jika batal pilih lainnya
+          qtyInput.classList.add("hidden");
+          qtyInput.setAttribute("disabled", "true");
+          qtyInput.removeAttribute("required");
+          qtyInput.value = "";
         }
       }
 
-      // PROSES KIRIM DATA
+      // HANDLE UNTUK INPUT MANUAL "LAINNYA"
+      function toggleLainnyaInput(checkbox) {
+        const divLainnya = document.getElementById("divLainnya");
+        const textLainnya = document.getElementById("textLainnya");
+        const qtyLainnya = document.getElementById("qtyLainnya");
+
+        if (checkbox.checked) {
+          divLainnya.classList.remove("hidden");
+          textLainnya.setAttribute("required", "true");
+          qtyLainnya.setAttribute("required", "true");
+          qtyLainnya.value = 1;
+          textLainnya.focus();
+        } else {
+          divLainnya.classList.add("hidden");
+          textLainnya.removeAttribute("required");
+          qtyLainnya.removeAttribute("required");
+          textLainnya.value = "";
+          qtyLainnya.value = "";
+        }
+      }
+
+      // PROSES PENGIRIMAN DATA MULTI-ITEM
       document
         .getElementById("laporForm")
         .addEventListener("submit", async function (e) {
           e.preventDefault();
-          const submitBtn = this.querySelector('button[type="submit"]');
-          submitBtn.innerHTML = "⏳ Mengirim Laporan...";
-          submitBtn.disabled = true;
 
-          // Ambil nilai item (dari dropdown atau ketikan manual)
-          let itemFinal = document.getElementById("itemAmbil").value;
-          if (itemFinal === "Lainnya") {
-            itemFinal = document.getElementById("itemLainnya").value;
+          // Kumpulkan semua item yang dicentang
+          const selectedItems = [];
+          const checkboxes = document.querySelectorAll(
+            '#itemSelectionContainer input[type="checkbox"]',
+          );
+
+          checkboxes.forEach((cb) => {
+            if (cb.checked) {
+              if (cb.value === "Lainnya") {
+                const namaBarang = document.getElementById("textLainnya").value;
+                const jumlahBarang =
+                  document.getElementById("qtyLainnya").value;
+                if (namaBarang && jumlahBarang) {
+                  selectedItems.push({ item: namaBarang, qty: jumlahBarang });
+                }
+              } else {
+                const row = cb.closest(".flex");
+                const qty = row.querySelector(".qty-input").value;
+                selectedItems.push({ item: cb.value, qty: qty });
+              }
+            }
+          });
+
+          // Validasi jika belum memilih item satu pun
+          if (selectedItems.length === 0) {
+            alert(
+              "Peringatan: Silakan pilih minimal satu item barang yang diambil!",
+            );
+            return;
           }
 
-          const dataLapor = {
-            type: "Lapor", // Penanda untuk Google Script
-            company: document.getElementById("company").value,
-            box: document.getElementById("box").value,
-            location: document.getElementById("location").value,
-            nama: document.getElementById("nama").value,
-            departemen: document.getElementById("departemen").value,
-            itemAmbil: itemFinal,
-            jumlah: document.getElementById("jumlah").value,
-            alasan: document.getElementById("alasan").value,
-          };
+          const submitBtn = this.querySelector('button[type="submit"]');
+          submitBtn.innerHTML = "⏳ Sedang Mengirim Laporan...";
+          submitBtn.disabled = true;
 
-          try {
-            const response = await fetch(SCRIPT_URL, {
-              method: "POST",
-              headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify(dataLapor),
-            });
+          const infoCompany = document.getElementById("company").value;
+          const infoBox = document.getElementById("box").value;
+          const infoLocation = document.getElementById("location").value;
+          const infoNama = document.getElementById("nama").value;
+          const infoDepartemen = document.getElementById("departemen").value;
+          const infoAlasan = document.getElementById("alasan").value;
 
-            await response.text(); // Tunggu balasan dari server
+          let successCount = 0;
 
+          // Kirim data satu per satu ke Google Sheets menggunakan perulangan (Looping)
+          for (const barang of selectedItems) {
+            const payload = {
+              type: "Lapor",
+              company: infoCompany,
+              box: infoBox,
+              location: infoLocation,
+              nama: infoNama,
+              departemen: infoDepartemen,
+              itemAmbil: barang.item,
+              jumlah: barang.qty,
+              alasan: infoAlasan,
+            };
+
+            try {
+              const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(payload),
+              });
+              if (response.ok) successCount++;
+            } catch (err) {
+              console.error("Gagal mengirim item: " + barang.item, err);
+            }
+          }
+
+          // Cek hasil pengiriman berkala
+          if (successCount === selectedItems.length) {
             alert(
-              "✅ Terima kasih! Laporan pemakaian berhasil dicatat di sistem.",
+              `✅ Sukses! Sebanyak ${successCount} item pemakaian berhasil dicatat di sistem.`,
             );
             window.location.href = "portal-p3k.html" + window.location.search;
-          } catch (err) {
+          } else if (successCount > 0) {
             alert(
-              "❌ Gagal mengirim laporan. Pastikan koneksi internet stabil.",
+              `⚠ Sebagian data berhasil terkirim (${successCount} dari ${selectedItems.length}). Cek koneksi internet.`,
             );
-            submitBtn.innerHTML = "Kirim Laporan";
+            window.location.href = "portal-p3k.html" + window.location.search;
+          } else {
+            alert(
+              "❌ Gagal mengirim laporan. Pastikan Google Script Anda aktif dan internet stabil.",
+            );
+            submitBtn.innerHTML = "Kirim Semua Laporan";
             submitBtn.disabled = false;
           }
         });
