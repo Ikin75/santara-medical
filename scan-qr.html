@@ -3,15 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Scan QR P3K</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -21,29 +18,50 @@
       body {
         font-family: "Poppins", sans-serif;
       }
-    </style>
-    <style>
-      #reader video {
-        width: 100% !important;
-        height: auto !important;
-        object-fit: cover;
+      /* Styling untuk merapikan UI bawaan scanner */
+      #reader {
+        width: 100%;
         border-radius: 24px;
-        /* filter: contrast(1.05) sharpen(1);  <-- HAPUS BARIS INI */
+        overflow: hidden;
+        border: 4px solid #f97316;
+        background: white;
+        padding: 16px;
+      }
+      #reader button {
+        background-color: #f97316;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: bold;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+        transition: 0.3s;
+      }
+      #reader button:hover {
+        background-color: #ea580c;
+      }
+      #reader a {
+        color: #f97316;
+        font-weight: bold;
+        text-decoration: none;
+      }
+      #reader select {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        width: 100%;
       }
     </style>
   </head>
 
   <body class="bg-gray-100">
-    <!-- HEADER -->
-
     <header class="bg-black text-white py-5 shadow-xl">
       <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <h1 class="text-3xl font-black">
-          <span class="text-orange-500"> Santara </span>
-
-          Scan QR
+          <span class="text-orange-500">Santara</span> Scan
         </h1>
-
         <a
           href="p3k.html"
           class="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-xl font-semibold"
@@ -53,34 +71,15 @@
       </div>
     </header>
 
-    <!-- CONTENT -->
-
     <section class="py-16 px-6">
       <div class="max-w-3xl mx-auto">
         <div class="bg-white rounded-3xl shadow-2xl p-10 text-center">
-          <h2 class="text-5xl font-black mb-4">Scan QR Kotak P3K</h2>
-
+          <h2 class="text-4xl font-black mb-4">Scan QR Kotak P3K</h2>
           <p class="text-gray-500 text-lg mb-10">
-            Arahkan kamera ke QR Code kotak P3K.
+            Gunakan kamera atau upload foto QR Code.
           </p>
 
-          <div
-            id="reader"
-            class="w-full max-w-xl mx-auto overflow-hidden rounded-3xl shadow-2xl border-4 border-orange-500"
-          ></div>
-
-          <!-- TAMBAHKAN KODE INI DI BAWAH READER -->
-          <div class="mt-8">
-            <p class="text-sm font-bold text-gray-500 mb-3">
-              Atau upload/foto QR secara manual:
-            </p>
-            <input
-              type="file"
-              id="qr-upload"
-              accept="image/*"
-              class="block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 cursor-pointer"
-            />
-          </div>
+          <div id="reader" class="mx-auto shadow-md"></div>
 
           <div id="qrResult"></div>
         </div>
@@ -89,106 +88,56 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const html5QrCode = new Html5Qrcode("reader");
-        const resultEl = document.getElementById("qrResult");
+        // MENGGUNAKAN Html5QrcodeScanner (Lebih stabil dari Html5Qrcode biasa)
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+          "reader",
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            // Fokus hanya pada format QR Code agar cepat
+            formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+            // Mengizinkan scan via kamera DAN via file upload
+            supportedScanTypes: [
+              Html5QrcodeScanType.SCAN_TYPE_CAMERA,
+              Html5QrcodeScanType.SCAN_TYPE_FILE,
+            ],
+          },
+          false, // Verbose log dimatikan
+        );
 
-        // Konfigurasi Scanner
-        const config = {
-          fps: 10,
-          qrbox: { width: 250, height: 250 }, // Kita kembalikan kotak fokusnya agar AI lebih terarah
-          disableFlip: false,
-          // FOKUS HANYA PADA QR CODE (Bikin performa jauh lebih cepat)
-          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
-        };
+        // RENDER UI & JALANKAN LOGIKA
+        html5QrcodeScanner.render(
+          // KETIKA BERHASIL (Kamera atau Foto)
+          (decodedText, decodedResult) => {
+            console.log("HASIL:", decodedText);
 
-        // LANGSUNG TEMBAK KAMERA BELAKANG (Tanpa perlu cari nama kamera)
-        html5QrCode
-          .start(
-            { facingMode: "environment" }, // Paksa gunakan kamera belakang
-            config,
-
-            // JIKA BERHASIL SCAN
-            (decodedText) => {
-              console.log("HASIL:", decodedText);
-
-              if (resultEl) {
-                resultEl.innerHTML = `
+            const resultEl = document.getElementById("qrResult");
+            if (resultEl) {
+              resultEl.innerHTML = `
                 <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all border border-green-300 shadow-md">
-                  ✅ QR Terdeteksi: <br> ${decodedText}
+                  ✅ QR Berhasil Terbaca: <br> ${decodedText}
                 </div>
               `;
+            }
+
+            // Hentikan scanner setelah sukses membaca
+            html5QrcodeScanner.clear();
+
+            // Redirect ke link hasil scan
+            setTimeout(() => {
+              if (
+                decodedText.startsWith("http://") ||
+                decodedText.startsWith("https://")
+              ) {
+                window.location.href = decodedText;
               }
-
-              // Hentikan scanner setelah berhasil
-              html5QrCode.stop().then(() => {
-                setTimeout(() => {
-                  // Cek apakah hasil scan berupa link
-                  if (
-                    decodedText.startsWith("http://") ||
-                    decodedText.startsWith("https://")
-                  ) {
-                    window.location.href = decodedText;
-                  }
-                }, 500);
-              });
-            },
-
-            // JIKA ERROR FRAME (Abaikan saja agar tidak penuh log-nya)
-            (errorMessage) => {},
-          )
-          .catch((err) => {
-            // TANGKAP ERROR JIKA KAMERA DITOLAK ATAU RUSAK
-            console.error("Gagal memulai kamera:", err);
-            alert(
-              "Gagal membuka kamera belakang. Pastikan Anda mengizinkan akses kamera di browser.",
-            );
-          });
-
-        // TAMBAHKAN FITUR SCAN DARI FILE / FOTO
-        const fileInput = document.getElementById("qr-upload");
-
-        fileInput.addEventListener("change", (e) => {
-          if (e.target.files.length === 0) {
-            return;
-          }
-
-          const imageFile = e.target.files[0];
-
-          // Memindai gambar statis
-          html5QrCode
-            .scanFile(imageFile, true)
-            .then((decodedText) => {
-              console.log("HASIL DARI FOTO:", decodedText);
-
-              if (resultEl) {
-                resultEl.innerHTML = `
-                  <div class="mt-6 bg-green-100 text-green-700 p-4 rounded-2xl font-bold break-all border border-green-300 shadow-md">
-                    ✅ QR Foto Terdeteksi: <br> ${decodedText}
-                  </div>
-                `;
-              }
-
-              // Hentikan live kamera jika foto berhasil discan
-              html5QrCode.stop().catch((err) => console.log(err));
-
-              setTimeout(() => {
-                if (
-                  decodedText.startsWith("http://") ||
-                  decodedText.startsWith("https://")
-                ) {
-                  window.location.href = decodedText;
-                }
-              }, 500);
-            })
-            .catch((err) => {
-              console.log("Gagal membaca QR dari foto:", err);
-              alert(
-                "QR Code tidak ditemukan pada gambar tersebut. Pastikan gambar jelas dan tidak buram.",
-              );
-              // Reset input file agar bisa mencoba foto lain
-              fileInput.value = "";
-            });
-        });
+            }, 500);
+          },
+          // KETIKA GAGAL / SEDANG MENCARI (Abaikan)
+          (errorMessage) => {
+            // Kosongkan agar konsol tidak error saat kamera mencari fokus
+          },
+        );
       });
     </script>
   </body>
