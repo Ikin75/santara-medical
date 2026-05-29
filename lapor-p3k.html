@@ -53,6 +53,8 @@
           </div>
         </div>
 
+        <input type="hidden" id="location" />
+
         <div>
           <label class="font-bold mb-2 block text-gray-800"
             >Nama Lengkap Pekerja</label
@@ -87,17 +89,18 @@
             <select
               id="itemAmbil"
               required
-              class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none bg-white"
+              onchange="cekLainnya()"
+              class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none bg-white cursor-pointer"
             >
               <option value="" disabled selected>-- Pilih Item --</option>
               <option value="Kassa steril">Kassa steril</option>
-              <option value="Perban">Perban</option>
               <option value="Plester Cepat">Plester Cepat</option>
               <option value="Alkohol 70%">Alkohol 70%</option>
               <option value="Povidon iodin / Obat Merah">
                 Povidon iodin / Obat Merah
               </option>
-              <option value="Lainnya">Lainnya (Tulis di Keterangan)</option>
+              <option value="Minyak Kayu Putih">Minyak Kayu Putih</option>
+              <option value="Lainnya">Lainnya (Ketik Manual)</option>
             </select>
           </div>
           <div>
@@ -111,6 +114,18 @@
               class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
             />
           </div>
+        </div>
+
+        <div id="divLainnya" class="hidden animate-pulse">
+          <label class="font-bold mb-2 block text-orange-500"
+            >Tuliskan Nama Item Lainnya:</label
+          >
+          <input
+            type="text"
+            id="itemLainnya"
+            placeholder="Ketik nama barang yang diambil..."
+            class="w-full border-2 border-orange-200 bg-orange-50 rounded-xl p-4 focus:ring-2 focus:ring-orange-500 outline-none"
+          />
         </div>
 
         <div>
@@ -128,7 +143,7 @@
 
         <button
           type="submit"
-          class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-orange-500/20"
+          class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-orange-500/20 transform active:scale-95"
         >
           Kirim Laporan
         </button>
@@ -136,30 +151,85 @@
     </div>
 
     <script>
+      // WAJIB SAMAKAN DENGAN LINK GOOGLE SCRIPT MILIKMU
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec";
+
       window.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         document.getElementById("company").value = params.get("company") || "-";
         document.getElementById("box").value = params.get("box") || "-";
+        document.getElementById("location").value =
+          params.get("location") || "-";
 
         // Link kembali ke portal
         document.getElementById("backBtn").href =
           "portal-p3k.html" + window.location.search;
       });
 
+      // FUNGSI MEMUNCULKAN KOTAK KETIK MANUAL
+      function cekLainnya() {
+        const pilihan = document.getElementById("itemAmbil").value;
+        const divLainnya = document.getElementById("divLainnya");
+        const inputLainnya = document.getElementById("itemLainnya");
+
+        if (pilihan === "Lainnya") {
+          divLainnya.classList.remove("hidden");
+          inputLainnya.setAttribute("required", "true");
+        } else {
+          divLainnya.classList.add("hidden");
+          inputLainnya.removeAttribute("required");
+          inputLainnya.value = ""; // Bersihkan jika batal pilih lainnya
+        }
+      }
+
+      // PROSES KIRIM DATA
       document
         .getElementById("laporForm")
-        .addEventListener("submit", function (e) {
+        .addEventListener("submit", async function (e) {
           e.preventDefault();
           const submitBtn = this.querySelector('button[type="submit"]');
           submitBtn.innerHTML = "⏳ Mengirim Laporan...";
           submitBtn.disabled = true;
 
-          // DI MASA DEPAN: Kamu bisa menyambungkan data ini ke Google Sheets (Tab "Laporan Pemakaian").
-          // Untuk saat ini, kita gunakan alert sukses simulasi.
-          setTimeout(() => {
-            alert("✅ Terima kasih! Laporan pemakaian berhasil dicatat.");
+          // Ambil nilai item (dari dropdown atau ketikan manual)
+          let itemFinal = document.getElementById("itemAmbil").value;
+          if (itemFinal === "Lainnya") {
+            itemFinal = document.getElementById("itemLainnya").value;
+          }
+
+          const dataLapor = {
+            type: "Lapor", // Penanda untuk Google Script
+            company: document.getElementById("company").value,
+            box: document.getElementById("box").value,
+            location: document.getElementById("location").value,
+            nama: document.getElementById("nama").value,
+            departemen: document.getElementById("departemen").value,
+            itemAmbil: itemFinal,
+            jumlah: document.getElementById("jumlah").value,
+            alasan: document.getElementById("alasan").value,
+          };
+
+          try {
+            const response = await fetch(SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify(dataLapor),
+            });
+
+            await response.text(); // Tunggu balasan dari server
+
+            alert(
+              "✅ Terima kasih! Laporan pemakaian berhasil dicatat di sistem.",
+            );
             window.location.href = "portal-p3k.html" + window.location.search;
-          }, 1500);
+          } catch (err) {
+            alert(
+              "❌ Gagal mengirim laporan. Pastikan koneksi internet stabil.",
+            );
+            submitBtn.innerHTML = "Kirim Laporan";
+            submitBtn.disabled = false;
+          }
         });
     </script>
   </body>
