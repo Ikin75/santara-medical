@@ -680,31 +680,35 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-      const params = new URLSearchParams(window.location.search);
+      window.addEventListener("DOMContentLoaded", () => {
+        // AMBIL PARAMETER URL
+        const params = new URLSearchParams(window.location.search);
 
-      const box = params.get("box");
+        const box = params.get("box");
 
-      if (boxParam) {
-        fetch(
-          "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec?box=" +
-            boxParam,
-        )
-          .then((res) => res.json())
+        const locationName = params.get("location");
 
-          .then((history) => {
-            console.log(history);
-          });
-      }
+        // AUTO ISI NOMOR BOX
+        if (box) {
+          document.getElementById("box").value = box;
 
-      const locationName = params.get("location");
+          // AMBIL HISTORY DARI GOOGLE SCRIPT
+          fetch(
+            "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec?box=" +
+              box,
+          )
+            .then((res) => res.json())
 
-      if (box) {
-        document.getElementById("box").value = box;
-      }
+            .then((history) => {
+              console.log("HISTORY:", history);
+            });
+        }
 
-      if (locationName) {
-        document.getElementById("location").value = locationName;
-      }
+        // AUTO ISI LOKASI
+        if (locationName) {
+          document.getElementById("location").value = locationName;
+        }
+      });
     </script>
   </body>
 </html>
