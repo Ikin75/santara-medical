@@ -28,7 +28,7 @@
         height: auto !important;
         object-fit: cover;
         border-radius: 24px;
-        filter: contrast(1.05) sharpen(1);
+        /* filter: contrast(1.05) sharpen(1);  <-- HAPUS BARIS INI */
       }
     </style>
   </head>
@@ -100,17 +100,26 @@
               });
 
               // Mulai kamera
+              // Mulai kamera
               html5QrCode
                 .start(
                   cameraId,
                   {
                     fps: 10,
-                    qrbox: { width: 250, height: 250 }, // Disesuaikan agar lebih fleksibel
-                    // aspectRatio dihapus agar otomatis menyesuaikan kamera perangkat
+                    // Hapus atau jadikan komentar bagian qrbox di bawah ini
+                    // qrbox: { width: 250, height: 250 },
+
+                    // Opsional: Paksa menggunakan resolusi HD untuk membaca QR padat
+                    videoConstraints: {
+                      width: { min: 640, ideal: 1280 },
+                      height: { min: 480, ideal: 720 },
+                      advanced: [{ focusMode: "continuous" }],
+                    },
                     disableFlip: false,
                   },
                   // SUCCESS CALL
                   (decodedText) => {
+                    // ... (kode sukses kamu di sini tetap sama) ...
                     console.log("HASIL:", decodedText);
 
                     const resultEl = document.getElementById("qrResult");
