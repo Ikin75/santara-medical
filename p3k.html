@@ -196,10 +196,7 @@
                 </div>
               </div>
 
-              <div
-                id="itemCardsContainer"
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-              ></div>
+              <div id="itemCardsContainer" class="flex flex-col gap-4"></div>
             </div>
 
             <div class="space-y-6 pt-8 border-t border-gray-100 mt-10">
@@ -302,7 +299,6 @@
         window.location.href = "login-p3k.html";
       }
 
-      // Cegah enter men-submit form
       document
         .getElementById("p3kForm")
         .addEventListener("keydown", function (e) {
@@ -311,7 +307,7 @@
           }
         });
 
-      // 2. DATA ITEM P3K (21 Item Standar)
+      // 2. DATA ITEM P3K
       const items = [
         { name: "Kassa steril terbungkus", standard: 20 },
         { name: "Perban 5 cm", standard: 2 },
@@ -322,7 +318,7 @@
         { name: "Mitella", standard: 2 },
         { name: "Gunting", standard: 1 },
         { name: "Peniti", standard: 12 },
-        { name: "Sarung tangan steril", standard: 1 },
+        { name: "Sarung tangan steril sekali pakai", standard: 1 },
         { name: "Sarung tangan non steril", standard: 1 },
         { name: "Masker", standard: 2 },
         { name: "Pinset", standard: 1 },
@@ -339,30 +335,34 @@
       const cardsContainer = document.getElementById("itemCardsContainer");
       let lastInspection = {};
 
-      // 3. RENDER KARTU ITEM
+      // 3. RENDER KARTU ITEM (DESAIN LIST/TABLE)
       items.forEach((item, index) => {
         cardsContainer.innerHTML += `
-          <div class="item-card bg-white rounded-2xl p-5 border border-gray-200 shadow-sm transition-all hover:shadow-md relative overflow-hidden" data-name="${item.name.toLowerCase()}">
+          <div class="item-card bg-white rounded-2xl p-4 md:p-5 border border-gray-200 shadow-sm transition-all hover:shadow-md relative overflow-hidden group" data-name="${item.name.toLowerCase()}">
             <div id="cardBorder-${index}" class="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 transition-colors"></div>
             
-            <div class="flex justify-between items-start mb-1 pl-2">
-              <h4 class="font-bold text-gray-800 leading-tight pr-2">${item.name}</h4>
-              <span id="status-${index}" class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-green-100 text-green-700 shrink-0">Aman</span>
-            </div>
-            
-            <p class="text-xs text-gray-500 mb-4 pl-2">Standar: <span class="font-black text-gray-700">${item.standard}</span> | Bln Lalu: <span id="last-${index}" class="font-bold text-gray-400">0</span> (<span id="diff-${index}" class="font-bold">0</span>)</p>
+            <div class="pl-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              
+              <div class="md:w-5/12">
+                <h4 class="font-bold text-gray-800 text-lg leading-tight mb-1">${item.name}</h4>
+                <p class="text-xs text-gray-500">Standar: <span class="font-black text-gray-700">${item.standard}</span> | Bln Lalu: <span id="last-${index}" class="font-bold text-gray-400">0</span> (<span id="diff-${index}" class="font-bold text-xs">0</span>)</p>
+              </div>
 
-            <div class="grid grid-cols-2 gap-3 pl-2">
-              <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase block mb-1">Jml Aktual</label>
-                <div class="relative">
+              <div class="grid grid-cols-2 gap-4 md:w-5/12">
+                <div>
+                  <label class="text-[11px] font-bold text-gray-400 uppercase block mb-1">Aktual</label>
                   <input type="number" id="actual-${index}" max="${item.standard}" class="w-full border border-gray-300 rounded-xl py-2 px-3 font-bold text-center focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition" value="${item.standard}" />
                 </div>
+                <div>
+                  <label class="text-[11px] font-bold text-gray-400 uppercase block mb-1">Tgl Expired</label>
+                  <input type="date" id="expired-${index}" class="w-full border border-gray-300 rounded-xl p-2 text-sm text-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition" />
+                </div>
               </div>
-              <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase block mb-1">Tgl Expired</label>
-                <input type="date" id="expired-${index}" class="w-full border border-gray-300 rounded-xl p-2 text-xs text-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition" />
+
+              <div class="md:w-2/12 flex md:justify-end">
+                <span id="status-${index}" class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-green-100 text-green-700 w-full md:w-24 text-center block">Aman</span>
               </div>
+
             </div>
           </div>
         `;
@@ -395,7 +395,6 @@
 
           function checkStatus() {
             let actual = parseInt(actualInput.value) || 0;
-            // Cegah input melebihi standar
             if (actual > item.standard) {
               actualInput.value = item.standard;
               actual = item.standard;
@@ -404,9 +403,9 @@
             const expiredDate = new Date(expiredInput.value);
             const today = new Date();
 
-            // Reset Class
+            // Format CSS dasar untuk kotak Status
             statusSpan.className =
-              "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0";
+              "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider w-full md:w-24 text-center block transition-colors";
 
             if (expiredInput.value && expiredDate < today) {
               statusSpan.innerText = "Expired";
@@ -458,7 +457,7 @@
 
             const percent = Math.round((safe / items.length) * 100);
             document.getElementById("percentageText").innerText = percent + "%";
-            document.getElementById("progressBar").style.width = percent + "%";
+
             if (percent < 50)
               document.getElementById("progressBar").className =
                 "bg-red-500 h-4 rounded-full transition-all duration-500";
@@ -468,6 +467,7 @@
             else
               document.getElementById("progressBar").className =
                 "bg-green-500 h-4 rounded-full transition-all duration-500";
+            document.getElementById("progressBar").style.width = percent + "%";
           }
 
           actualInput.addEventListener("input", checkStatus);
@@ -489,7 +489,6 @@
 
         if (boxParam) {
           document.getElementById("box").value = boxParam;
-          // Ambil riwayat kotak ini dari Google Script
           fetch(
             "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec?box=" +
               boxParam,
@@ -501,7 +500,7 @@
               });
               items.forEach((item, index) => {
                 const actual = document.getElementById(`actual-${index}`);
-                if (actual) actual.dispatchEvent(new Event("input")); // Trigger update UI
+                if (actual) actual.dispatchEvent(new Event("input"));
               });
             })
             .catch((err) => console.log("Gagal memuat history"));
@@ -534,7 +533,7 @@
       document
         .getElementById("p3kForm")
         .addEventListener("submit", function (e) {
-          e.preventDefault(); // Cegah form langsung terkirim
+          e.preventDefault();
 
           const boxValue = document.getElementById("box").value;
           if (!boxValue) {
@@ -542,7 +541,6 @@
             return;
           }
 
-          // Susun HTML untuk Rangkuman di dalam Modal
           const summaryList = document.getElementById("summaryList");
           summaryList.innerHTML = "";
 
@@ -562,7 +560,6 @@
             if (statusText === "Expired")
               badgeClass = "bg-red-100 text-red-700";
 
-            // Format Teks Expired
             let expText =
               "<span class='text-gray-300 italic'>Tanpa Tgl Expired</span>";
             if (expiredVal) {
@@ -571,7 +568,7 @@
             }
 
             summaryList.innerHTML += `
-            <li class="flex justify-between items-center p-3 sm:p-4 bg-white border border-gray-200 rounded-2xl shadow-sm">
+            <li class="flex justify-between items-center p-3 sm:p-4 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
                <div class="flex-1 pr-3">
                   <p class="font-bold text-gray-800 text-sm md:text-base leading-tight mb-1">${item.name}</p>
                   <p class="text-xs text-gray-500">Std: ${item.standard} | Aktual: <span class="font-black text-black text-sm">${actualVal}</span></p>
@@ -584,7 +581,6 @@
           `;
           });
 
-          // Tampilkan Modal
           modal.classList.remove("hidden");
         });
 
@@ -599,7 +595,7 @@
         finalBtn.disabled = true;
 
         const data = {
-          type: "Inspeksi", // Menyesuaikan dengan Google Script yang baru
+          type: "Inspeksi",
           company: document.getElementById("company").value,
           officer: document.getElementById("officer").value,
           location: document.getElementById("location").value,
@@ -621,7 +617,6 @@
         }
 
         try {
-          // Ganti Link SCRIPT_URL di bawah jika belum sesuai
           const response = await fetch(
             "https://script.google.com/macros/s/AKfycbycb_RW6ZvWpsYk9ikKnR1xIblJ5rI_RGx_U-NaAnIPzgmQjqvk9v1xgXZ-zFG0uiA/exec",
             {
@@ -634,14 +629,11 @@
 
           alert("✅ Luar Biasa! Inspeksi berhasil disimpan ke database.");
 
-          // Reset form dan tutup modal
           document.getElementById("p3kForm").reset();
           preview.classList.add("hidden");
           document.getElementById("officer").value =
-            localStorage.getItem("santara_petugas"); // Jaga nama petugas agar tidak hilang
+            localStorage.getItem("santara_petugas");
           closeModal();
-
-          // Kembali ke halaman atas
           window.scrollTo({ top: 0, behavior: "smooth" });
         } catch (err) {
           alert("❌ Gagal menyimpan data: " + err.message);
@@ -651,7 +643,6 @@
         }
       }
 
-      // Tambahan style untuk animasi modal muncul
       document.head.insertAdjacentHTML(
         "beforeend",
         `<style>@keyframes scale-up { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }</style>`,
